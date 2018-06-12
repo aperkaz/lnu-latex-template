@@ -1,0 +1,1541 @@
+%----------------------------------------------------------------------------------------
+%	Settings and configuration
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,12pt]{article}
+
+% TODO - vertical spacing paragraphs	
+% \setlength{\parskip}{0.85em}
+
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+%\usepackage{dtklogos}
+\usepackage{wallpaper}
+\usepackage[absolute]{textpos}
+\usepackage[top=2cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+%\usepackage{appendix}
+\usepackage[nottoc]{tocbibind}
+\usepackage[colorlinks=tr ue,
+            linkcolor=black,
+            urlcolor=blue,
+            citecolor=black]{hyperref}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\usepackage{sectsty}
+\sectionfont{\fontsize{14}{15}\selectfont}
+\subsectionfont{\fontsize{12}{15}\selectfont}
+\subsubsectionfont{\fontsize{12}{15}\selectfont}
+
+% Handle citations
+
+\usepackage{csquotes}
+
+% Add XML support
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{color}
+
+\renewcommand{\thetable}{\arabic{section}.\arabic{table}}  
+\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}} 
+
+%----------------------------------------------------------------------------------------
+%	
+%----------------------------------------------------------------------------------------
+\newsavebox{\mybox}
+\newlength{\mydepth}
+\newlength{\myheight}
+
+\newenvironment{sidebar}%
+{\begin{lrbox}{\mybox}\begin{minipage}{\textwidth}}%
+{\end{minipage}\end{lrbox}%
+ \settodepth{\mydepth}{\usebox{\mybox}}%
+ \settoheight{\myheight}{\usebox{\mybox}}%
+ \addtolength{\myheight}{\mydepth}%
+ \noindent\makebox[0pt]{\hspace{-20pt}\rule[-\mydepth]{1pt}{\myheight}}%
+ \usebox{\mybox}}
+
+%----------------------------------------------------------------------------------------
+%	Title section
+%----------------------------------------------------------------------------------------
+\newcommand\BackgroundPic{
+    \put(-2,-3){
+    \includegraphics[keepaspectratio,scale=0.3]{img/lnu_etch.png} % Background picture
+    }
+}
+\newcommand\BackgroundPicLogo{
+    \put(30,740){
+    \includegraphics[keepaspectratio,scale=0.10]{img/logo.png} % Logo in upper left corner
+    }
+    \put(150,780){
+    \includegraphics[keepaspectratio]{img/text.png} % Logo in upper left corner
+    }}
+
+\title{	
+\vspace{-8cm}
+\begin{sidebar}
+    \vspace{10cm}
+    \normalfont \normalsize
+    \Huge Master Thesis Project \\
+    \vspace{-1.3cm}
+\end{sidebar}
+\vspace{3cm}
+\begin{flushleft}
+    \huge Engineering Context-Centric Future Internet Applications\\ 
+    \it \LARGE  
+\end{flushleft}
+\null
+\vfill
+\begin{textblock}{6}(10,13)
+\begin{flushright}
+\begin{minipage}{\textwidth}
+\begin{flushleft} \large
+\emph{Author:} Alain Perkaz Ortiz\\ % Author
+\emph{Supervisor:} Mauro Caporuscio \\ % Supervisor
+\emph{Examiner:} 	\\ % Examiner (course manager)
+\emph{Reader:} \\ % Examiner (course manager)
+\emph{Semester:} VT 2018\\ % 
+\emph{Course Code:} 5DV50E\\ % Subject area
+\emph{Subject:} Computer Science\\ % Subject area
+\end{flushleft}
+\end{minipage}
+\end{flushright}
+\end{textblock}
+}
+
+\date{} 
+
+\begin{document}
+\pagenumbering{gobble}
+\newgeometry{left=5cm}
+\AddToShipoutPicture*{\BackgroundPic}
+\AddToShipoutPicture*{\BackgroundPicLogo}
+\maketitle
+\restoregeometry
+\clearpage
+%----------------------------------------------------------------------------------------
+%	Abstract
+%----------------------------------------------------------------------------------------
+\selectlanguage{english}
+\begin{abstract}
+\noindent As the number and heterogeneity of devices connected to the Internet grow, the inherent complexity of the applications deployed on it also increases exponentially. Aside from the added complexity burden to the developers, this growth also challenges the current architectures for distributed application development and deployment, with challenges such as bandwidth limitations, latency concerns over ubiquitous computing and autonomous service management. To face those challenges, the Future Internet umbrella term is presented. This thesis focuses on providing an overview of the main challenges to consider when developing Future Internet content-centric applications, which leverage the available services in a given environment to opportunistically provide the content-tailored experiences. Aside from a theoretical background, the report will introduce an architectural extension over the PRIME framework and validate it over a real-world motivation scenario. By doing so, the theoretical background will be applied for conducting a design-level architectural extension suitable for real-world scenarios.
+\newline
+\textbf{Keywords}: Future Internet, content-centric applications, semantic annotations, interest-defined communities, Prime middleware
+\end{abstract}
+
+\newpage
+%----------------------------------------------------------------------------------------
+%	Preface
+%----------------------------------------------------------------------------------------
+
+\textbf {\large{Preface}}\\
+
+\noindent The following thesis is the final work of the Software Technologies master at Linnaeus University, Sweden. It presents the results of the research on Engineering Context-Centric FI Applications. An in-depth literature review on the topic and related work have been done to provide a comprehensive view on the challenges and opportunities on the topic and an architectural extension over the PRIME middleware based on a contextualised motivation scenario proposed.
+
+From my point of view, as a Computer Engineering graduate from Spain, the opportunity of conducting a substantially theoretical and systematic thesis research work has helped broaden knowledge on severe areas of Computer Science previously unknown for me.
+
+I would like to thank my thesis supervisor Mauro Caporuscio and PhD student Mirko D'Angelo for their contribution and provided guidance, in the form of discussions and continuous feedback. I would also like to thank the thesis course examiner Narges Khakpour for the useful insights into the process to follow during the thesis and guidance. Lastly, I would like to thank my family and close friends for their support during this last period of studies.
+
+%----------------------------------------------------------------------------------------
+\newpage
+\pagenumbering{gobble}
+\tableofcontents % Table of contents
+\newpage
+\pagenumbering{arabic}
+
+%----------------------------------------------------------------------------------------
+%
+%	Here follows the actual text contents of the report.
+%
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+
+The Internet as we know has sustained endless evolution since its creation, radically changing how communication and commerce operate globally. From the World Wide Web to the two-way video calls, it has changed how societies communicate and function. The Internet itself was first conceived as a network that would enable the communication between multiple trusted and known hosts, but as the time passed, has notably evolved. Due to the significant adoption of Internet-connected devices (phones, personal computers, tablets...), the initial device homogeneity present on the Internet has shifted towards an extremely heterogeneous environment, where many different devices consume and publish resources, also referred as services.
+
+As the number of connected devices and resources increase, it becomes critical to building systems that enable the autonomic publication, consumption and retrieval of those resources \cite{visionOfAutonomicComputing}. The inherent complexity of systems continues to grow, therefore setting boundaries to the achievable capabilities of those. The traditional approaches to network-based computing are not sufficient \cite{cc_berkeley-view} and new reference approaches should be presented. In this context, the Future Internet (FI) \cite{futureInternet_IoT} term emerges, a worldwide execution environment connecting large sets of heterogeneous and autonomic devices and resources.
+
+In such environments, systems leverage service annotations to fulfil emerging goals and dynamically organise resources based on interests. Although work has been conducted in those areas, active research is being carried in the following: extensible machine-readable annotation of services, dynamic service discovery, architectural approaches for decentralised systems, and interest-focused dynamic service organisations. Those concepts will be explained in the next section, as they will serve to contextualise the later presented Problem Statement and research questions.
+
+\subsection{Background and Motivations}
+
+As briefly mentioned in the introduction, Internet has been a factor of great impact in our societies. Nowadays, with the rise of data-driven trends such as IoT and Industry 4.0, the impact continues to grow. Those trends will allow to increase production capabilities \cite{Industry4_0}, save energy \cite{IoT_review}, and provide better healthcare \cite{IoT_healthcare}, among others. However, although the reach of the impact is clear, the limitations of current approaches must be solved first \cite{cc_berkeley-view}\cite{CASCOM}.
+
+Along the data-expansion process \cite{bigData_growth}, it is important to note that the Internet itself has evolved from Web 1.0 to Web 3.0 \cite{web30_review}, embracing (semantic) data in applications and business processes. Regarding this process, it is safe to say that the future relays on content-driven solutions. Cloud Computing service popularisation is a clear example of this, from Platform as a Service to the more and more common Software as a Service. Developers focus on building content and interaction \cite{soundInteractionCentric} centric systems, by relying on resources provided by other systems, for the sake of complexity and flexibility \cite{SaaS}. 
+
+On the following subsections, we will provide a general introduction to multiple FI-related concepts and approaches. 
+
+Future Internet refers to a global execution environment, populated by a myriad of heterogeneous services (resources, devices and systems). While the foundations of the Internet are challenged by the growth and expansion of multimedia applications and content \cite{futureInternet_designIssues}, the communications conducted through it are also evolving. From the original human-human range, it will expand to human-machine and machine-machine \cite{m2m_embeddedInternet} (also referred as M2M) communications.
+
+The Future Internet has been defined to stand on top of four main pillars \cite{futureInternet_cross-ETP-vision}: Internet by and for the People, Internet of Consensus and Knowledge, Internet of Services and Internet of Things. Those pillars share a common foundation, the Network Infrastructure. On the following image (Figure \ref{fig:fi_pillars}), the goals of each pillar and foundation displayed.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/fi_pillars}
+\end{center}
+\caption{FI pillars and foundation.}
+\label{fig:fi_pillars}
+\end{figure}
+
+The first of those pillars is the Internet by and for the People, which shall connect the growing population over time, encouraging the free exchange of ideas. The existing conceptual barrier between information producers and consumers will fade out, and roles such as the prosumer will emerge. Clients of FI will easily share knowledge and contents between them (both producing and consuming them), dynamically creating virtual communities around that shared knowledge. Semantic annotation of services, knowledge exchange mechanisms and machine reasoning over knowledge is crucial for this pillar to form. Also, the automatic knowledge addition over existing information and automatic reasoning are required to cope with the existing and future information amounts available on the Web.
+
+The second pillar, the Internet of Consensus and Knowledge emerges after the need mentioned above of intelligent knowledge sharing mechanisms. As the available information grows and grows, the manual management of it becomes infeasible. Semantic tagging of resources enables that, by deriving machine and understandable human knowledge from information. Opportunistic run-time aggregation of services \cite{serviceComposition} based on the available services and the declaration of services of interests is also possible.
+
+The Internet of Services is the third pillar upon which FI stands. An umbrella term that covers several interacting phenomena that will shape the future of how services operate over the Internet focuses on Internet-scale service-oriented computing. It will radically change the way Internet applications are engineered, executed and operated. New categories of applications, based on the access to computing resources, data and software capabilities on demand will emerge. This provides ease of service orchestration and potentiates prosumers sharing their knowledge. The applications will be centred around the content they provide, by self-servicing and opportunistic service mashup. Systems will be fully personalised to the users (preferences, interests, navigation patterns). Center on "loose-coupling" of services, services will be invoked and detected based on their capabilities. Cloud computing is a clear example of this, as it abstracts where the application is executed and how the computing resources are managed, providing greater scalability and flexibility.
+
+The fourth and last pillar, Internet of Things (IoT) many objects from our daily life will be connected to the Internet and coordinated for the achievement of goals. IoT will face high levels of heterogeneity at the device level, and semantics will play a central role in managing that diverse environment. To address scalability needs, semantic dependant protocols must be created, so any device that requires or provides a service that requires the existence of other services can fulfil its goal.
+
+As a closing note, to allow content-driven applications to operate in such environments, it is essential to allow opportunistic run-time aggregation of services \cite{serviceComposition}, based on the available services and the declaration of services of interests. Concerning the service availability, heterogeneous services must be extensively annotated in machine-readable formats. To do so, concerns such as service annotation, service discovery, resource sharing and Edge Computing architectures must be analysed. 
+
+\subsubsection{Cloud Computing}
+
+Cloud Computing (CC) is a paradigm that composes the Net Infrastructure layer of FI, along Fog Computing, Edge Computing nad Edge computing. It is also a bussiness model and deployment model for applications. It enables the access to a pool of shared computing assets (resources) \cite{cc_berkeley-view}, often over the internet. It emerged as an alternative to reduce the required upfront IT-investment of companies, by providing easy scaling, fast provisioning and minimal management of resources. Since Amazon Web Services (AWS) presented EC2 \cite{aws_reference}, the access to high-capacity networks, low-cost computing parts and the broad adoption of hardware virtualisation, has driven a broad adoption of CC. Multiple services and deployment models are available, each best suited for different use cases.
+
+Cloud providers enable access to their resources in multiple forms \cite{cc_nist-definition}, the most common ones being: On-Premise, Infrastructure as a Service (IaaS), Platform as a Service (PaaS), Software as a Service (SaaS), Backend as a Service (BaaS) and Serverless Computing. Those are layered following abstraction, from lowest-level abstraction (On-Premise) to highest-level abstraction (Serverless Computing).
+
+The lowest level of abstraction with regards to the Cloud resources is provided by the On-Premise CC model, also referred as Private Cloud. The Cloud deployment models will be briefly described on the next section, but On-Premise CC enables the fine-grained control of all the resources, from the networking, storage and server layers, up to the application level. All the stack must be entirely managed by the Cloud user. 
+
+IaaS provides high-level API access to the low-level Cloud resources. The user of such service can deploy and manage all the stack that lays on top of the hypervisor, that being: the operating system, storage, deployed applications and limited access to network components. The Cloud provider provisions the resources, but the Cloud user is responsible for patching and updating Operating System (OS) and apps. The billing is typically conducted on utility computing basis, the amount of consumed and allocated resources \cite{cc_classification}ce. Examples of this model are: Amazon Web Services (AWS) EC2, Google Cloud Compute Engine \cite{googleComputeEngine} and Azure IaaS \cite{Azure_IaaS}.
+
+PaaS provides next-tier abstraction when compared with IaaS, by offering the application development environment to developers. In contrast with IaaS, Cloud providers usually provision and keep up to date the OS, databases and web servers. Within this type of service, most vendors allow to vertically scale the resources that are being used by the deployments. Users can focus on the development environment their application will require, without expending resources on maintenance and troubleshooting.
+
+SaaS, which is also referred as on-demand-software \cite{softwareIntoService}, provides a very high level of abstraction. Cloud vendors are responsible for the maintenance of the infrastructure and platforms on which those apps relay. The end-user gains access to software functionality, on top of the aforementioned operational benefits of Cloud hosting. App updates can be rolled-out seamlessly to the end-users, scale horizontally to meet needs and host multi-tenant solutions. The pricing model followed by SaaS is set by a flat fee per user, billed monthly or yearly. Popular SaaS examples are: Salesforce \cite{salesforce}, Microsoft Office 365 \cite{office365}, and Google Apps \cite{googleApps}.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/cloud-service-models}
+\end{center}
+\caption{Levels of abstraction of the main Cloud service models.}
+\label{fig:cloud-service-models}
+\end{figure}
+
+Along the previously mentioned service models (Figure ref{fig:cloud-service-models}), and with the expansion of the Web as a medium to serve apps, Cloud providers started offering BaaS \cite{cc_baas}. The goal of such service is to reduce the overhead and operational costs to develop, deploy and maintain backend services for Web and mobile apps. Features such as authentication, user-database management, asset storage and transparent scalability are provided. Some examples of popular BaaS service solutions are Firebase \cite{firebase}, Meteor \cite{meteor} and Kumulos \cite{kumulos}.  
+
+Finally, it is worth mentioning the Serverless service model, which has gained much traction lately \cite{serverless_openLambda}. Serverless rises the abstraction level even higher from the CC resources, by providing a stateless environment where functions are executed when responding to events (API calls, updates to a database, message queue events...). Serverless provides the advantages of virtually unlimited horizontal scalability, ease of deployment and testing of the business logic, as the running environment is taken cared by the Cloud providers. The pricing model is another advantage of such model. Billing is done per-function-call, allowing extremely fine-grained control over the payments, and reducing to zero the system cost if the function is not reacting to an event. Examples of this model are AWS Lamba functions \cite{aws_lambda}, Google Cloud functions \cite{googleCloud_functions} and Azure functions \cite{azure_functions}.
+
+Regarding the ownership and deployment models, Cloud Computing providing infrastructures can be separated into four main groups. Those are Public Clouds, Private Clouds, Community Clouds and Hybrid Clouds. 
+
+Public Clouds are Cloud infrastructures accessible through network interfaces of open access (such as Internet browsers). Architecture wise there are not mayor different with Private Clouds, although security may be approached differently, as Public Cloud vendors offer their services to a public audience over a non-trusted network. To mitigate the effect of this, Cloud providers also procure direct connect options to their private owned Internet-like networks and avoiding the need of using VPN connections.
+
+Private Clouds are Cloud infrastructures operating only by private organisations. They run on an organisation's servers, very much like an Intranet \cite{cc_concepts-architecture-challenges}. Such ownership model provides multiple benefits, mainly: fine-grained control over deployments, updates, and security. That said, owning such infrastructure requires a high initial investment and pushes organisations to continually reevaluate the taken decisions with regards to the resources, as security issues must be evaluated and countered before inferring into vulnerabilities. Also, the main advantages provided by the economic model of CC (hand-off management, reduces physical footprint and virtually unlimited scalability) are lost, raising criticism about this deployment model \cite{cc_concepts-architecture-challenges}.
+
+Between the Public and Private Cloud concepts, Community Cloud stands. Acting as a conceptual extension over Private Clouds, in this deployment model multiple organisations with common concerns share the ownership of a Cloud. Only the members of members of those organisation can access it, and the costs are shared across multiple organisations. This shared-ownership model provides better economic results than what can be achieved with Private Clouds, but worse than Public Clouds.
+
+Hybrid Clouds are the composition or two or more Cloud deployment models (private, public or Community). Such set up provides the advantages of combining the benefits of those models, without losing the decoupled advantages. To achieve that, services of those distinct models are combined and composed, and model's boundaries crossed. Multiple use cases for this type of Cloud model occur, namely in the enterprise context. A company may require separating its sensitive data (user roles, personal information, payroll data...) from the operational business logic. The sensitive data can be then stored on a Private Cloud set up on the company's data centre, and the non-sensitive business logic part deployed into the Public Cloud, as AWS Serverless functions, for example.
+
+\subsubsection{Fog Computing}
+
+Once laying the conceptual foundations of what CC is and clarifying which kind of deployment model provides, it is crucial to describe other approaches to decentralised computing which conform the aforementioned FI Net Infrastructure. Fog Computing (also referred as fogging), in an architectural plan where a substantial part of the work (computation, storage, communication and management) is offloaded from the traditional Cloud. By extending the previously presented CC model to the edge of the networks and near the end users, a new horizon of opportunities is open for applications and systems.
+
+The work mentioned above is offloaded into edge devices often referred as Fog Nodes (client devices or near-client devices), allowing to alleviate CC resource requirements by conducting work near the clients. This approach proves to increase efficiency when dealing with IoT architectures \cite{fogComputing-IoT}, as significant amounts of data tend to be generated in the edge of the system, which incurs high bandwidths costs. When applying Fog Computing to such scenario by aggregating data before transport, bandwidths and storage costs of the CC infrastructure are significantly reduced.  
+
+Another reason to consider such architectural approach in the scope of IoT is mobility. In a CC centralised architecture, service mobility is restricted by the latency towards the Cloud providers. When elements often change geographical location, unless the Cloud infrastructure is geographically distributed (and even so, the client-server latency can exceed the requirements), effective node mobility is limited. By adding strategically placed near-client nodes, Fog Computing devices can potentially move (ex. smart city, smart car) without suffering unexpected latency increase (full device mobility not yet supported). Those extra nodes can also extend the system by adding direct peer to peer connection (lower latency than CC centralised architecture) and data aggregation capabilities. In the following image (Figure \ref{fog-computing}), a high-level smart city reference architecture is exemplified, following both CC and Fog Computing approach.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/fog-computing}
+\end{center}
+\caption{Smart City, CC on the left, Fog Computing approach on the right.}
+\label{fig:fog-computing}
+\end{figure}
+
+Once some of the advantages have been presented, it is equally important to highlight the challenges that this paradigm needs to face to succeed. The choice of virtualisation approach, the previously mentioned issues with latency, security and network management, constitute a relevant sample \cite{fogComputing-platform} of those challenges. 
+
+The chosen virtualisation approach will significantly impact the performance of the Fog Nodes, for either container or hypervisor-based. Containers provide lightweight OS-level virtualisation, which eases the provision and deployment of solutions, and at the same time offers fine-grained security and portability. However, if a container based solution is selected, OS level flexibility is lost. A node will not be able to run multiple operating systems. Due to that restriction, hypervisor-based virtualisation is encouraged. 
+
+Security represents one of the most significant challenges for Fog Computing, as it has to be taken into account at every layer of the design-stack. In contrast with CC, Fog Nodes face new vector threads not existing on an adequately managed Cloud infrastructure \cite{fogComputing-security}. As an example, Fog Nodes are susceptible to man-in-the-middle attacks, privacy issues and security issues due to authentication at different gateway levels. For mitigation, public key infrastructure (PKI) and homomorphic data encryption are recommended.
+
+Lastly, network management must be addressed by applying software management techniques to networks (ex. network function virtualisation or software-delivered networking). Nonetheless, the integration of such methods is not an easy task and still constitutes an open research area.
+
+\subsubsection{Edge Computing}
+
+Edge Computing (also referred as Pure Edge Computing) \cite{edgeComputing_vision-and-challenges} can be understood as a natural evolution of the approach proposed by Cloud Computing and Fog Computing (a further iteration of the FI Net Infrastructure models), as the edge devices become more and more capable. In the context of IoT and FI, Edge refers to the devices that are located close to the sources of data. Those devices can be very heterogeneous, such as SCADA controllers, wind turbines, data aggregation nodes, temperature sensors... while sharing the characteristic that they are usually located far from the centralised computing nodes (namely Cloud). The Edge Computing paradigm is based on and composed by multiple technologies and approaches, namely: peer-to-peer networks (as edge devices can directly connect to each other), overlay networks, everything as a service (XaaS) concept, Grid Computing and the aforementioned Fog Computing.
+
+In comparison with Fog Computing, which performs partial Cloud offloading, by aggregation and precomputation, Edge Computing pushes the computing boundaries even further from the central Cloud, by offloading into the Edge devices. This allows to de-emphasise the architectural importance of a central computing core (Cloud providers, in the case of CC applications). It also reduces the technological vendor-lock-in for Cloud solutions, as the central nodes are much less critical than in CC and Fog Computing. On the following image (Figure \ref{edge_architecture}), a high-level Edge Computing example is presented. Elements from Smart Factory, Smart City and Smart Car interact with each other, each group having their own Edge Gateway and sharing a peer-to-peer communication integration.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/edge_architecture}
+\end{center}
+\caption{Edge Computing architecture.}
+\label{fig:edge_architecture}
+\end{figure}
+
+The features provided over more traditional CC solutions are evident, but it is worth mentioning that until recent years, the access to Edge Computing solutions was restricted to big companies. Due to the continuous cost-drop of sensors and computing power, the growing amounts of machine and environmental data, and the rise in machine learning and data analytics, Edge Computing has been increasingly adopted.
+
+The peer-to-peer (vastly decentralized) architectural approach adjusts well to contexts such as FI context-centric applications. Enabling the services (edge nodes) to conduct direct connection with minimal central dependencies, reduces peer-to-peer latency, and by gathering meaningful data, enables to generate contextualised service-groups. This becomes extremely useful once the application use case shifts towards near-real-time data streaming, for which centralised CC solutions will eventually present bandwidth and latency limitations.
+\\
+\\
+\textbf{Peer to Peer Networks}
+\\
+
+Peer to Peer networks \cite{p2p_reference}, also known by the acronym P2P, refer to networks composed of a set of computing nodes directly connected to the internet. It does not rely on a centralised server for routing the traffic or communication, providing substantial scalability benefits. On FI environments where applications are completely decentralized, this approach proposes a direct communication between the distributed nodes.
+
+Peers in a P2P network have equal rights and can at the same time produce and consume (prosumers) data. Even when sharing computing resources, nodes can be composed of heterogeneous devices with widely ranging capabilities, as long as they all access the P2P network over a unified API.
+
+A great example of P2P at scale is Napster \cite{napster_reference}. Created in 1999 by Shawn Fanning, enabled clients to share their mp3 music files and access the ones of the network peers. That said, P2P networks can be applied to a range of use cases, such as: instant communication \cite{ricochet_reference},secure browsing \cite{tor_reference}, p2p payments \cite{circle_reference} and recent use-cases such as blockchain \cite{blockchain_reference}. 
+
+To manage P2P networks over heterogeneous communication technologies and routing configurations, overlay networks are leveraged (FI's common foundation, network infrastructure). They provide large-scale data sharing, content distribution, efficient searching and selection of nearby peers, among other features \cite{p2p-overlay_survey}. In the context of FI and highly distributed systems, they provide an abstraction layer from the underlying ever-changing network topologies. Emergent P2P overlay networks can be divided into to main groups: structured and unstructured. 
+
+Structured overlay networks relay on Distributed Hash Tables (DHT) for keeping track of the available resources (or data objects). DHT maps every resource to one unique key, and those keys are distributed deterministically over the overlay network. Scalable storage and retrieval are backed by key/value pairs, and when a retrieval or modification operation is triggered, the request is routed to the peer that contains the pertinent key. Due to the deterministic distribution and key/value mapping, any file can be located on O(logN) overlay hops. However, due to the potentially high peer to peer lookup latency (linked to the structural differences between the overlay and P2P network distribution), performance can be negatively affected. Structure networks also incur a higher computation overhead than unstructured networks for popular resources. Chord \cite{chord_reference} is a structured overlay networks example. 
+
+Unstructured overlay networks are composed of peers that hold no prior knowledge about the network or neighbouring peer distribution. Queries are distributed by flooding mechanisms, where a peer response to one of such queries by pointing which of its content matched the request. While this technique is suitable for retrieving popular content within the peer network, it is not well suited for finding rare content. It incurs lower overhead than structured networks for popular content, but the load on each peer scales linearly with the system size and query number. When significant system increases and aggregated queries occur, peers become overwhelmed, and the system can saturate. Gnutella \cite{gnutella_reference} is an unstructured overlay network example, which provides distributed file search and download capabilities among peers. 
+
+\subsubsection{XaaS}
+
+On the FI environment, where everything (every resource: business service, content or peer) can be considered as a service, the XaaS term emerges. Is the outcome of the combination of the previously presented four FI pillars: Internet of People, Internet of Knowledge, Internet of Services and Internet of Things. By wrapping resources in computational abstractions, on-demand interactions are enabled between users and resources, moving the focus point away from infrastructure and operations \cite{service-computing-manifesto}. IoT leverages a myriad of distributed heterogeneous devices abstracted as services for composing applications and bringing value to end-users.
+
+This is crucial if the full potential of FI is to be exploited. Data is gradually completed with information (metadata, tags, annotations...) and means to deliver that knowledge efficiently are required. The existing services are of ubiquitous, and the aforementioned raw knowledge is not enough, as reasoning over it will bring many benefits. Web services have historically been the key technology for the delivery of services.
+
+The main challenges that this paradigm faces align with the ones from FI, namely: service composition, service design, crowdsourcing-based reputation and IoT. Establishing seamless discovery and composition over services of different nature is key, mashing-up resources to provide meaningful services to end users, aligned with their preferences and interests.
+
+Information completion over services and service discovery will be covered more in-depth in subsequent sections of the report, along with service annotation and service mash-up (grouping) management.
+
+\subsubsection{Service Discovery}
+
+To conclude with the background and motivation section of the report, we will provide an introduction to service discovery. When engineering distributed applications in contexts such as FI and specially when paired with paradigms such as XaaS, it is crucial for resources to be accessible and discoverable in an automatic manner. In some aspects, service discovery works similar to a Domain Name System (DNS), although DNS server and protocols are more tailored for the routing of static resources than service discovery in FI context.
+
+As mentioned in previous sections, FI presents a heterogeneous execution environment that enables emergent composition of applications by opportunistic aggregation of resources \cite{prime_approach}. Services must be first property annotated and their capabilities contextualised. Contextualization refers to machine-ready data understanding, and resource correlation which minimises resource management overhead.
+
+Apart from the FI use case, service discovery protocols have been broadly developed by multiple vendors and applied to numerous fields (ex. \cite{upnp_reference}): Universal Plug and Play (UPnP, from Microsoft), Bluetooth Service Discovery Protocol (SDP), Kubernetes Service Discovery, Zigbee Device Discovery... As different service discovery protocols apply different technological approaches and terminologies, a common conceptual classification of components must be first conducted. In further sections of the report, the features and advantages of multiple service discovery approaches on pervasive environments will be analysed,  using that standard conceptual classification. On the next image (Figure \ref{fig:serviceDiscovery-stack}), we provide a graphical representation of those main components.
+
+\newpage
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.6\columnwidth]{img/serviceDiscovery-stack}
+\end{center}
+\caption{Service Discovery protocol components.}
+\label{fig:serviceDiscovery-stack}
+\end{figure}
+
+Following the image above, the protocol components will be briefly described form the bottom up (from low to high levels of abstraction in the stack). 
+
+First and foremost, the services and its attributes must be named. Clients will use that name for conducting further service search operations. Such naming (also referred as annotation) cannot be undertaken manually at scale, as the manual annotation overhead becomes too big. Template-based approaches are followed to solve this issue, defining an initial format for service names and attributes. Also, predefined namings (Universal Unique Identifier, Bluetooth SDP) can be used. However, those methods scale poorly when dealing with a genuinely heterogeneous and pervasive resource pool such as in IoT.
+
+After the services have been named, an initial communication is to be established. Based on the network and system configurations, different approaches can be taken, namely: unicast, multicast and broadcast. Unicast is the most resource-efficient, although it requires manual configuration (network address registration) of all the peer nodes. Multicast allows to dynamically identify the unicast addresses of the available services after a few messages. Broadcast has the same advantages as multicast but is often restricted to one network hop.
+
+Once the network protocol has been set, the discovery and registration process takes place. The most common approaches are query and announcement-based discovery and registry information. In the query-based method, a query resolver (often a designated system agent) processes the query-request and response right away. It takes care of the computing work for keeping track of the different service life-cycles, offloading it from the clients. On announcement-based approaches, interested clients listen to the broadcast of available information regarding the discovery and registration, may it be to notify that new services hop on, off or other relevant changes.
+
+With regards to the discovery infrastructure, two approaches are taken: with dedicated discovery components (directory-based) or without (nondirectory-based). The main difference between the two is that dedicated components act as a query resolver by keeping and updating tracks of available services. When non-dedicated components are used, each service becomes its query resolver and has to respond if the request has matched.
+
+The status of those services if often kept as soft-state, after a period a service needs to update its state, or it will become invalid. However, maintaining state as hard-state is also a possibility, but as services are not auto removed from registries after a certain threshold, clients have to query the resolvers more often to validate that their available-service records are updated.
+
+As clients discover and consume services through the resolvers, and the systems where the service discovery operates grows, it is a good practice to add scoped discovery. Network topologies, user roles, context information and combinations of the previous are often employed for such purpose. On top of the scope, service selection options are added. The selection option can be either manual (prompt the user) or automated (weighted preferences), potentially allowing for advanced automated matchmaking.
+
+After the scoping and matchmaking approaches are selected, service invocation and usage are defined. Invocation can be provided at different abstraction levels: network-address (lowest level, clients must choose the interaction protocol), communication protocol (RPC, XML, HTTP...) and application operations (highest abstraction level, specific to custom application domain). With regards to the service usage, explicit or lease-based options exist. In explicit usage scenarios, the client must actively notify once the used resource can be freed again, and on lease-based, a service usage period is negotiated between client and service, allowing that time-frame to be cancelled, or expressively extended by further negotiations.
+
+Finally, how the service updates the status should be defined. Polling and event-based notification (clients subscribe to updates) are the most common approaches for this.
+
+The choices made on each level of the stack will have a direct impact on the choice of technologies and suitability of architectures for the system context in mind. As often occurs in software engineering, there is no silver-bullet for service discovery that solves all discovery use cases. On subsequent sections of the report, the different approaches for service discovery in FI scenarios, especially with semantically annotated services will be examined, and a reference architecture proposed.
+
+
+\subsection{Motivating Scenario}
+
+After presenting the main motivations for conducting research in the area of FI, we will introduce a motivating scenario. The scenario will serve to exemplify a concrete use case inside the myriad applications conceivable inside FI paradigm. It will also serve to draw an evaluation frame upon which to assess the state of PRIME and the quality of the architectural extension that we will introduced.
+
+Due to the broad set of Future Internet potential use cases, providing a concrete use case from which to extract requirements and engineer a solution, allows us to narrow down from the conceptual to a more technical level of detail. That said, it is important to highlight that we will design the architecture with a strong focus on extensibility, to ease its adaptation to other FI scenarios. The research questions that we will introduce on the following "Problem Statement" section aims to provide answers to the cross-cutting concerns that FI applications have to face.
+
+\subsubsection{Social Library}
+
+This section introduces \textit{Social Library}, a Future Internet context-centric application example. 
+
+\textit{Social Library} is an open-source, open-access and distributed copyright-free media-sharing platform. It aims to democratise the access to learning and public-access to content. Instead of keeping a centralised architecture with a server storing all the content, it is built around the idea of collaboration. Users of the system share their copyright-free content through the app and gain access to the content provided by others. It is important to note that the access does not imply content-sharing, even if recommended for the optimal functioning of the system.
+
+The whole system is constructed around the ideas of content-centric (applications driven by its contents) and total distribution. As previously mentioned, the system will not store the resources in a centralised manner but leverage the computing resources available in the client nodes (\textit{Social Library} nodes). The resources (ex. books, audio files and movies) must be annotated so that they can be retrieved, shared and managed autonomously.
+
+As the system grows with more clients and presumably more heterogeneous resources, the previously mentioned annotations will be leveraged to allow users to subscribe to selected resources from peers. Ideally, users should first try to access a replicated resource from its near neighbours, as latency is most likely to increase otherwise. The annotations will also enable the grouping of users sharing the same interests (ex. biology videos or terror novels), so the additions and modifications of resources from such category will trigger efficient broadcasts through the group. To maximise the flexibility, users shall be capable of belonging to more than one group at the same time, with autonomous live-cycles. By grouping users based on their interests (either by the provided content or consumed content), dynamic scalability is achieved, as lower level interest gropings can potentially be governed by higher level geographical-region groupings if the system extension requires so.
+
+The functional requirements for \textit{Social Library} are as follows:
+
+\begin{itemize}
+\item \textbf{R1}: Users of \textit{Social Library} may access the system through personal computers, smartphones or tablets. 
+\item \textbf{R2}: Users may join/leave the system dynamically.         
+\item \textbf{R3}: System users are autonomous, and the running system-instance has no prior knowledge about them.
+\item \textbf{R4}: The types of resources shared through the system vary over time.
+\item \textbf{R5}: All the users connected to the system must be discoverable and reachable by other system users.
+\item \textbf{R6}: Users can define their interests towards resources.
+\item \textbf{R7}: Users are aggregated into emerging communities based on common interests.
+\item \textbf{R8}: Users within the same community opportunistically interact with each other, exchanging group-relevant information.
+\end{itemize}
+
+After defining the set of functional requirements that \textit{Social Library} must cover, we have identified some cross-cutting concerns relevant to this scenario and potentially many other FI application scenarios. Those concerns settle a fundamental base for the research question formulation, as we will try to bridge those concerns by knowledge acquisition and a design-level architectural extension formulation (deeply covered on the "Implementation" section). The cross-cutting concerns are presented as informal open-questions, upon which we will construct the research questions.
+
+\begin{itemize}
+\item As the number of services available in applications grows, is it possible to categorise and attach knowledge information automatically to the services? If so, is there any de-facto approach? To which degree each service supports extensibility (both manual and automatic)?
+\item How to deal with high device mobility, especially with regards to discovery? Is it possible to enable the discovery of unforeseen resources at runtime, in distributed environments? If so, which are the main approaches to follow?
+\item Aside from the application service annotation and management, is it possible to represent in a machine-readable format the interests of the application users? If so, combining it with the service annotation, is it possible to create communities of users at runtime that enable opportunistic service collaboration in purely distributed computing scenarios?
+\end{itemize}
+
+\subsection{Problem Statement}
+
+Starting from the premise that Future Internet applications heavily rely on data and that such data can become dynamically available through services, it is safe to assume as a starting point that everything could potentially be a service (that provides, consumes or processes data) \cite{prime_approach}.
+
+Several solutions \cite{IoT_architecture-European-perspective} have been proposed to partially cope with the challenges that such environments present \cite{IoT_reference-architectures}. However, the tight coupling with a central Cloud Computing entity is still high, limiting the future-proofing of such solutions (with regards to the potential bottlenecks and dependence with the private Cloud). By complementing the features of such systems with event-based P2P communication \cite{prime_approach}, Future Internet applications can be deployed with minimal dependency towards private Cloud vendors and reduced latency (by directly accessing neighbouring resources).
+
+The main focus of this thesis project is not to develop from scratch yet another Edge Computing platform, but to contribute by addressing the importance of enabling content-centric Future Internet applications, by providing a solution to dynamically annotate services and allow content-based service collaboration. The PRIME approach \cite{prime_approach} will serve as a starting point, widely extending its architecture by adding support for those mentioned above.
+
+In order to frame and evaluate the impact of the architectural extension of PRIME, we will use the set of functional requirements extracted from the previously introduced "Motivating Scenario". By extracting the research questions from the requirements and context that such scenario presents, it also allows us to evaluate the validity of the architectural extension. That said, is important to note that we will design the extension with the support of other motivating scenarios in mind. The results and compliance of the extension over those requirements will constitute the later "Evaluation" section of the report.
+
+In the following table, we present the research questions. We have elicited them from the active lines of research in FI and with the help of the \textit{Social Library} motivating scenario. We also attach a brief description to each research question, clarifying its intent and linking relevant resources of interest.
+
+\begin{tabular} {|p{1.2cm}|p{11.6cm}|} \hline
+\textbf{RQ1} & How to provide an extensible semantic annotation of services?
+\begin{itemize}
+    \item Focus on providing a state of the art analysis of the different approaches to service annotation, by focusing on extensibility and machine readability. One approach will be recommended from the pool of options, to be used in RQ2 and RQ3.
+    \end{itemize}
+ \\ \hline
+\textbf{RQ2} & How to implement a semantic-aware service discovery in Pure Edge Computing environments? 
+\begin{itemize}
+  \item Builds on top of the previous research question RQ1. Semantic-aware service discovery has been developed so far (\cite{semantic_matchmaking-and-discovery}\cite{semantic_service-discovery}\cite{semantic_service-discovery_inHealthcare}), but a deeper analysis of alternatives for conducting it on Pure Edge Computing environments is needed \cite{edgeComputing_vision-and-challenges}. The questions focus on addressing the validity of different architectures for such discovery in Pure Edge Environments, iterating through topics such as distributed data messaging, annotation negotiation and service extensibility.
+\end{itemize}
+\\ \hline
+\textbf{RQ3} & How to enable interest-focused service organisation through semantic-based dynamic groupings on PEC scenarios?
+\begin{itemize}
+  \item Semantic-based dynamic grouping stands for how to enable self-adapting application service groupings based on their content. The content of such services is of heterogeneous nature. Thus annotations will need to be merged and modified at runtime. However, this research question focuses on the feature of dynamic grouping. Rule-based groupings have been previously implemented \cite{A3_reference}, but the generation of groups based on dynamic rules need to be addressed. It relays in the outcome of RQ1, as the grouping system may differ depending on the annotation mechanism. Complex networks within PEC could provide mechanisms to permit interest based self-managing communities \cite{prime_pec}.
+\end{itemize}
+\\ \hline
+\end{tabular}\\
+
+\subsection{Contributions}
+
+The contributions of this project will be centred around providing a deeper understanding of the multiple aspects involved in the design and architectures necessary to build FI content-centric applications. Firstly, we will conduct an extensible state-of-the-art review of the main topics. Secondly, a design-level reference architecture will be presented, covering the cross-cutting concerns (also referred ar research questions). Finally, by leveraging the motivating scenario requirements, the reference architecture will be evaluated. In the process, the reference architecture PRIME \cite{prime_approach} will be analysed, and identify areas of improvement to cover the previously mentioned cross-cutting concerns. This architecture (PRIME) is currently not fully engineered to meet all the concerning aspects that may arise, although its vision is being followed \cite{prime_example-service_composition}\cite{prime_example-IoT} and is under active development \cite{prime_approach}, therefore providing a stable starting point. By doing so, we will extend such architecture and provide guidance for further development, if FI content-centric apps are to be supported. 
+
+To cope with the broadness of the topic and multiple scenarios where the reference architecture could be applied, we have proposed a specific motivating scenario. However, the set of requirements provided by it will also be shared by many applications to run on FI environment following a content-centric approach, providing a stable conceptual and architectural base to extend. This will ease further extension of the proposed approach and helps contextualise by using a concrete scenario. 
+
+\subsection{Target group}
+
+The primary target group of this work are the researchers interested in expanding their knowledge in the area of content-centric FI applications, by covering many of the main concerns and challenges shared by such apps. The proposed reference architecture will also provide a general starting point for developers interested in implementing such systems, as the reference architecture will narrow down to a technology/framework level. Is also worth mentioning that the current researchers and developers involved with PRIME will also benefit from the outcomes of this work. As previously mentioned, the PRIME framework is under active development and adding support for interest-enabled FI content-centric applications is under the active concern of the researchers \cite{prime_pec}.
+
+\subsection{Report Structure}
+% -> Here you outline the rest of the report. It shall contain which chapters that will follow, and what each of them is about.
+
+This thesis report analyses and reviews the existing challenges of context-centric FI applications, and proposes a reference architecture extension for such applications over the PRIME framework. We will explain the followed methodology in the second section ("Method"). The analysis and answering of the research questions over a theoretical approach is conducted over a literature review, whose results are presented in the third section ("Literature review"). On the fourth section ("Implementation"), the current status of PRIME and the proposed architectural extension are detailed. Then, the extension is evaluated with the requirements of \textit{Social Library} and the results discussed. Finally, the conclusions and future work are outlined, covering all the conducted thesis work. 
+
+\newpage
+\section{Method}
+% TODO - polish the terms per each RQ
+
+In this chapter, we will describe the applied scientific approach followed to answer the research questions. The method will be described, along with its reliability and validity assessment.
+
+\subsection{Scientific approach}
+
+To correctly answer the previously introduced research questions, we have conducted an extensible literature review about the different characteristics of the Future Internet, the implication of content-centric apps and the different layers that compose such applications. Those components range from extensible and machine-readable service annotation mechanisms, service discovery on distributed computing environments, and resource-grouping based on interest definition. We analysed multiple resources for each one of those layers and acquired the relevant knowledge.
+
+To compare the different approaches for each one of those layers, we chose a qualitative research approach. We compared the different approaches for each one of those layers, the relevant frameworks and the main characteristics. 
+
+To generate a meaningful reference architecture extension over the PRIME framework and provide a useful view of the areas of interest when building context-centric FI applications, we analysed the state of the art and extracted the relevant cross-domain information. After proposing the architectural extension of PRIME to cover the areas of interest defined by the research questions, the validity of such extension will be assessed leveraging the functional requirements of \textit{Social Library}. This assessment will be qualitative, as it aims to evaluate the extension from a software engineering perspective.
+
+\subsection{Method description}
+
+ As we previously mentioned, the research conducted for this report has been mostly structured as a literature review. It was chosen, taking into account the broadness of the topic and the quantity of available material. Aside from the literature review, the compliance of the PRIME architectural extension will be qualitatively assessed against the set of functional requirements of \textit{Social Library}. The two methods will be described in detail in the following subsections. As a reference, we provide a high-level method work-flow schema on the following image (Figure \ref{fig:method-workflow-schema}).
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.65\columnwidth]{img/method-workflow-schema}
+\end{center}
+\caption{High-level method workflow schema.}
+\label{fig:method-workflow-schema}
+\end{figure}
+
+As described in the upper image, the thesis method workflow looks as follows. First, the thesis domain was chosen with the help of the supervisor, and a motivating scenario created, from which to extract the set of functional requirements. After the problem statement was defined and the research questions formulated. The literature review was conducted after that, covering the areas and issues presented by the research questions. Once the literature review reached the desired level of completion, the reference architecture extension over PRIME was drafted. Finally, the draft was assessed with regards to the fulfilment of the set of functional requirements presented by the motivating scenario. Although the workflow is presented as a linear process, iteration has been present through all the process, by reshaping the requirements, research questions, literature review scope and aim and the architectural extension.
+
+\subsubsection{Literature Review}
+
+As previously mentioned, we acquired the relevant information to answer the presented research questions by a literature review. Due to the time constraints of the thesis and the broadness of the topic, we had to exclude the option of conducting a systematic literature review. Instead, a literature review has been conducted to gain broather knowledge, following a set of guidelines heavily inspired by the systematic literature review guidelines \cite{systematic_reviews}.
+
+We have chosen such method to successfully provide a framework upon to conduct the required analysis to solve the research questions and formulate the reference architecture extension over PRIME. The literature review provides a proper meaning for exploring the reach of each research question, contextualise the aforementioned PRIME extension and identify main methodologies. On the following image (Figure \ref{fig:systematic_literature_review-steps}), we introduce the primary building blocks of the literature review strategy in ordered fashion. Those blocks are represented sequentially, although they process is executed iteratively. As the review advanced, we refined the existing approach and selection of reference papers.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/systematic_literature_review-steps}
+\end{center}
+\caption{Building blocks for the literature review strategy.}
+\label{fig:systematic_literature_review-steps}
+\end{figure}
+
+The first and foremost block of the strategy to define the review protocol was to propose the research questions. Those have been introduced in the previous section, the Problem Statement.
+
+Second, the selection criteria for the review was set. In the case of this thesis, the selection criteria has been iteratively constructed and involved choosing the primary sources for scientific publications (mainly Google Scholar, IEEE, Lnu OneSearch and ScienceDirect) and a set of core papers from which to kickstart the research. The core papers are referenced in the brief explanations below the mentioned research questions. Such papers have been chosen by applying snowball techniques to the most relevant outcomes for the key phrases, and following experts advise (professors and supervisors).
+
+Third, we set the search strategy. We chose a set of relevant key phrases per each research question, namely:
+\begin{itemize}
+    \item \textbf{RQ1}: \textit{"resource annotation", "service annotation", "extensible service annotation", "extensible resource annotation", "machine-readable annotation"}.
+    \item \textbf{RQ2}: \textit{"semantic-awareness", "service discovery", "PEC environments", "semantic-aware service discovery", "service discovery in edge networks", "semantic discovery on distributed computing"}.
+    \item \textbf{RQ3}: \textit{"interest definition", "semantic interest definition", "service composition", "dynamic service composition", "opportunistic service grouping", "distributed service grouping on fully distributed networks", "semantic-based grouping", "dynamic grouping", "service communities"}.
+\end{itemize}
+
+Once we defined the search strategy, a list of resources was acquired. This part of the literature review has been strongly iterative, as we have taken the advice of the thesis supervisor, Linnaeus University professors, new publications and the incremental discovery of resources into account. It is important to mention that the publication date of the resources has also been taken into account. We considered general view and high-level architectural blueprints regardless of their publication date, but for the framework and technological assessment, papers with a publication date before 2000 have been excluded. This has been helpful, as it narrows down the focus of research to a set of more current and updated technologies, which are also more likely to be supported by community and creators.
+
+After selecting the resources, a synthesis of them has been made. The abstract, introduction where analysed first, and if the paper seemed relevant, then it was read thoroughly. All the read papers have been managed using Zotero \cite{zotero_reference}, a bibliography management system, and annotated using Pdf Foxit Reader \cite{foxit_reference}. Zotero allows the creation of organised collections of research material, which has been exploited by separating the resources by topic and relevance. Zotero also provides a browser plugin which allows for one-click export of the reference to a collection and automatic annotation of scientific resources.
+
+The direct outcomes of the literature review are presented in the Literature Review section, covering the technological and conceptual background of each of the aforementioned research questions. Is important to mention that not all the results are included in such section, as many of the acquired knowledge has also been applied to the background analysis and design of the architectural extension over PRIME.
+
+\subsubsection{Qualitative Evaluation of PRIME extension}
+
+Apart from the core method of literature review, we conducted a qualitative evaluation of the architectural extension of PRIME.
+
+Once setting up the motivating scenario and extracting the theoretical base for answering the research questions, we will present the architectural extension of PRIME. As the extension is proposed at a software design level, a qualitative evaluation approach is required, rather than quantitative.  
+The functional requirements extracted from \textit{Social Library} will serve as the evaluation scale for the extension. They cover what an FI content-centric application will require and help contextualise the extension over a real-world use case. The flow of the evaluation is framed on the next figure (Figure \ref{fig:extensions_qualitative-evaluation}).
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.85\columnwidth]{img/extensions_qualitative-evaluation}
+\end{center}
+\caption{Qualitative evaluation of PRIME extension.}
+\label{fig:extensions_qualitative-evaluation}
+\end{figure}
+
+
+\subsection{Reliability and Validity}
+% Here you discuss the reliability and validity of your project. You can read about reliability \href{https://coursepress.lnu.se/subject/thesis-projects/reliability/}{here} and about validity \href{https://coursepress.lnu.se/subject/thesis-projects/validity/}{here}. Discuss if you have any reliability issues or validity threats in your project here.
+
+In the case of this report, reliability \cite{reliability_reference} means if others will get the same research outcomes and reach the same conclusions when executing the same work. Linking back to the previously mentioned extension of knowledge to cover and limitations for conducting a systematic literature review, the negative  reliability impact has been mitigated by conducting the literature review under the aforementioned strategy. For the qualitative assessment of the PRIME extension, researchers are most likely to draw the same conclusions, as each of the research questions which is supported by the extension, has been analysed following the key phrases, inclusion/exclusion criteria and sources for scientific publication.
+
+With regards to the validity \cite{validity_reference}, internal validity and external validity have been taken into account. 
+
+Internal validity takes into account if the drawn results follow the collected data.  The results of the literature review are condensed into the Literature Review section of the report. In order to minimize the possibility of bias, we have conducted the literature review following a rigid strategy. However, the presented architectural extension over PRIME proposes a bigger challenge when it comes to assess the internal validity. The aim of the architecture is to bridge the gap encountered between the current version of PRIME and the context that the research questions frame. The extension will be assessed for fulfilment against the motivating scenario requirements, but does not constitute the only possible approach for extension.
+
+External validity refers to if the generality of the results are justified. On the context of this thesis work, this is harder to ensure, as different literature review outcomes could be achieved if different scientific publication reach engines or languages (such as Chinese) where to be applied. With regards to the external validity of the architectural extension over PRIME, it has been assessed with the help of the motivating scenario's functional requirements.
+
+\newpage
+\section{Literature Review} 
+
+In the following section, a state of the art review will be provided on relevant topics for enabling content-centric FI applications. We have extracted the content conducting a literature review, detailed in the previous section. The outcome is divided into three main sections, aligned with the proposed research questions, namely: semantic annotation of services, service discovery and interest-based grouping. Each section will first define why the topic is relevant inside the report's context, and then present the current state of the art. 
+
+Due to the extension of the available material, it is worth mentioning that this section covers in detail each topic, but does not aim to be an exhaustive analysis of all the existing approaches.
+
+\subsection{Semantic Annotation of Services} 
+
+As the amount of multimedia content and data grows consistently \cite{internetTrafficGrowth}, it has become increasingly important to enable the automatic annotation of it for further usage. Such annotations shall enable capabilities such as automatic indexing, retrieval and content reuse. 
+
+In the context of FI, it is necessary to highlight that any device connected to the Internet potentially constitutes a distinct data source. In such case, the services that provide data are to be annotated in machine-readable format, with a strong focus on extensibility. On the next section, the primary alternatives for service description will be analysed and evaluated, regarding the machine and human readability and their extensibility. We will also consider the state of the art analysis of the current approaches and standards followed by researchers.
+
+Extended research has been conducted on the areas of resource annotation in multiple contexts \cite{automaticTextExtractionFromVideo}\cite{webTextContextAnnotation}\cite{biomedicalResourceAnnotation}. However, such cases do not consider the challenges of running on PEC scenarios \cite{edgeComputing_vision-and-challenges} and while considering the importance of the machine-read			ability of annotations, it is also important not to let aside the human readability and software support. Such annotations must allow human supervision and reasoning over the represented content. Therefore, the readability (also referred as syntax) of the annotations provided by the different description frameworks will also serve as an evaluation angle.
+
+Apart from the machine-readable compliance of those annotations, the ever-growing context of the Internet is continuously pushing the boundaries regarding data formats, contents and existing resources as a whole. This trend proves infeasible to frame a stale reference architecture for what the annotation of exposed resources over the Web may look in the future. Instead of choosing a specific technological approach or annotation framework, it recommended to base such choice on extensible standards that allow seamless annotation and management of new resources \cite{CASCOM}, while maintaining backwards compatibility. 
+
+To enable fully functional service-oriented computing (content-focused FI apps), Semantic Web Services (SWS) \cite{SWS_semanticWebServices} description frameworks can be selected as a starting point. They provide means for intelligent agents to conduct meaningful and automated coordination of services on the Web, by describing what a service does and mapping its interfaces to those capabilities \cite{SWS_grounding}. Those frameworks describe behavioural and functional properties, leveraging logic-based formalisms also referred as ontologies. It is important to note that SWS approach is not the only valid starting point when it comes to context representation, as other approaches such as key-value, graphical modelling and logic notations have been explored \cite{semantic_reference} by literature. However, ontologies provide the aforementioned formalisation of the conceptualisation that more simple approaches fail to enable (ex. key-value based contextualizations), and thus hold a disadvantaged position in comparison with ontologies when it comes to machine readability and extensibility.
+
+As mentioned before, the semantic extension of Web Services is achieved by description frameworks. The report will provide a general overview of the most relevant approaches, namely: RDF, OWL-S (along RDF), WSML and SAWSDL. No framework choice will be made in this chapter, as a reference architecture will be formulated later in the report. However, we will leverage the information provided in this section for making a choice later.
+
+\subsubsection{RDF}
+
+Resource Description Framework (RDF) \cite{rdf_reference} is an abstract-syntax based framework for representing information in the Web. It defines a data model (abstract syntax) that links together all the RDF-based languages. RDF information is modelled as graphs of subject-predicate-object triples and express descriptions of resources. RDF was designed to provide a simple data model, formal semantics, extensible URI-based syntax, XML-based syntax and allow to make statements about any given resource. 
+
+The core of the RDF abstract syntax is the previously mentioned triples. Each triple is composed by a subject (node), predicate (edge) and object (node), which altogether create an RDF graph. Such construct is represented on the Figure \ref{fig:rdf_triple}. 
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.65\columnwidth]{img/rdf_triple}
+\end{center}
+\caption{RDF subject-predicate-object triple.}
+\label{fig:rdf_triple}
+\end{figure}
+
+The nodes that compose those RDF triples (also referred to as RDF statements) can be of three main types: IRIs, literals or blank nodes. IRIs (Internationalized Resource Identifier) and literals represent resources (such as documents, physical entities or abstract concepts). A RDF triple denotes that a binary relationship exists (predicate) between the subject and the object. In case of statements with blank nodes, it describes that a relationship exists for the given subject, but without providing any specific resource. On the following image (Figure \ref{fig:rdf_triple-literal_blank}), two examples are provided. The first one describes that the actor Brad Pitt has a father named William Pitt. The second one describes that Brad Pitt has a father, but does not specify which resource or entity that father may be.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/rdf_triple-literal_blank}
+\end{center}
+\caption{RDF triples with literal and blank nodes.}
+\label{fig:rdf_triple-literal_blank}
+\end{figure}
+
+IRIs are globally unique identifiers (inside a given RDF graph), and they are used to construct RDF vocabularies. RDFS (Resource Description Framework Schema) \cite{rdfs_reference} is one of those vocabularies, which provides data-modelling vocabulary as an extension of the underlying RDF vocabulary. Its central goal is to provide means to describe groups of related resources and their relationships. Those vocabulary extensions enable great expressibility in RDF, as defining custom vocabularies provide expressiveness over custom domains (ex. time-bounded events). In the specific case of RDFS, it semantically extends RDF with concepts such as classes, resources, properties, datatypes, and properties: range, domain, label, comment...
+
+As we previously mentioned, RDF data is expressed as graphs composed by a set of triples. Those graphs are static sets of information, yet mutable (by adding and removing triples). One of the benefits of such data structure is that multiple data sources (graphs) can be easily combined. By doing so, content from multiple sources can be accessed as one entity, while keeping the inner contents separated.
+
+Finally, its worth mentioning that RDF and its capabilities of semantic extension (via vocabularies) has set the foundations for the development of higher level frameworks for semantic annotations. RDF has some limitations though, namely: the limited local scope of properties (range limitations cannot be applied locally only), disjointness of classes (when a resource can belong to one class only), and cardinality restrictions (ex. when a lecture must have at least one lecturer assigned). Those limitations are a trade for its relative simplicity of expressiveness.
+
+\subsubsection{OWL-S}
+
+OWL-S \cite{owls_reference} describes semantic services by leveraging the W3C \cite{w3c} defined standard ontology language, OWL \cite{owl_reference}. OWL stands for Web Ontology Language and it was designed for the use by applications that needed to process information content, rather than just presenting it to humans. OWL is built as a vocabulary extension over the Resource Description Framework (RDF) \cite{rdf_reference}, which will be described in the next paragraph, and derived from DAML+OIL Web Ontology Language \cite{daml+oil_reference}. One of the main characteristics of OWL is that enables greater machine interpretability than other representation, due to the additional vocabulary provided along formal semantics. OWL itself can be broken into three sub-languages, with regards to expressibility: OWL Lite, OWL DL and OWL Full.
+
+OWL-S builds on top of the aforementioned DAML Schema (DAML-S) \cite{damls_reference} and was created with the aim of enabling the following tasks: automatic Web service discovery, automatic Web service invocation and automatic Web service composition. However, before diving more-in-depth on how OWL-S intents to enable the functions above, it is essential to separate the different types of services to consider: atomic or composite. By analysing the interaction level, atomic services enclose one-time-only interaction services (ex. request a postal code for an address), and composite services refer to uber-services composed by multiple atomic services (ex. e-shop checkout process service, as it may relay on inventory, email, and atomic payment services). OWL-S is designed to support both types of services, even if many of the motivation tasks make the most sense in the context of composite services.
+
+To achieve the motivation tasks previously declared, OWL-S provides an ontology covering three types of knowledge per service. What the service offers, how it is used and how does a client interact with it.
+
+Firstly, what the service provides to the potential clients is defined. By presenting the "service profile" (ServiceProfile ontology class), each service's functionalities are advertised. The primary purpose of the service profile is to enable service discovery, as it provides information such as inputs, outputs, preconditions, effects (IOPEs), service name, service category and extra meta-data about the service provider and context. We have added a graphical example of the ServiceProfile properties and classes below (Figure \ref{fig:owls-serviceProfile}).
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.9\columnwidth]{img/owls-serviceProfile}
+\end{center}
+\caption{Profile selected properties and classes.}
+\label{fig:owls-serviceProfile}
+\end{figure}
+
+Secondly, how the service is meant to be used is defined. By the "process model" (ServiceProcess ontology class), the service composition is set. Such formation can be achieved through choreography or orchestration \cite{reactiveMicroservicesArchitecture}, of the above mentioned atomic or composite services. Processes can be atomic (actions a service can perform by engaging on a simple iteration), simple (non-grounded simple interaction operations, used as process abstraction layer) and composite. Composite processes define the workflows required for service composition, using control flow operators (also referred as ControlContructs) \cite{CASCOM} such as Sequence, Unordered, Choice, If-then-else, Iterate, Repeat-until, Split and Split+Join. Is important to note, that what a composite process defines is not what the service will perform, but what behaviour a client can perform on a given service over a set of message-passing interactions. Aside from the control flow, specific data flow (input and output of a given process) and process variables can be declared inside the OWL-S process model. To provide a high-level understanding of the presented concepts, we provide a general process model schema below (Figure \ref{fig:owls-processModel}), highlighting the primary relations between classes and properties. 
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/owls-processModel}
+\end{center}
+\caption{Process model selected properties and classes.}
+\label{fig:owls-processModel}
+\end{figure}
+
+Finally, how to access a given service is specified through groundings. Those groundings are composed of the information details required to conduct the access, such as: which protocol to use, the message exchange format, serialisation approach, transport and address specifications. They compose a mapping from abstract to concrete specification of the resources required for interaction. Both ServiceProfile and ProcessModel constitute abstract representations, while ServiceGrounding deals with a specific level of abstraction. OWL-S supports arbitrary groundings; however, the existing Web Service Description Language (WSDL) \cite{wsdl_reference} standard is used. WSDL is an XML based framework for abstractly declaring a set of network endpoints and operations abstractly, and then bound them to the concrete network protocol and message formats. One of WSDL's advantages is the extensible nature that allows maintaining a unified endpoint description regardless of the grounded network protocols and message formats. 
+
+The relation between OWL-S and WSDL is complementary, as both languages are used to cover the distinct aspects of grounding. Atomic processes are mapped to WSDL operations, the OWL-S set of inputs correspond to WSDL message concept, and the types (OWL classes) of OWL-S input/outputs are assigned to WSDL abstract types. We exemplify this grounding in the figure below (Figure \ref{fig:owls-wsdl_grounding}).
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.77\columnwidth]{img/owls-wsdl_grounding}
+\end{center}
+\caption{Graphical representation of the OWL-S / WSDL grounding.}
+\label{fig:owls-wsdl_grounding}
+\end{figure}
+
+With regards to the available tooling and software support, it is worth mentioning that because OWL-S extends W3C standard ontology language OWL and builds on top of DAMLS, many tools are publicly available. For either discovery (ex. OWLS-MX hybrid matchmaker \cite{owls_mx}), composition (ex. composition planning with OWLS-XPLAN \cite{owls_xplan}) and development (ex. OWL-S IDE \cite{owls_ide}) of such systems. However, despite the available tooling and community support, the limited service description in practice when using OWL-DL rises some critics, as only the deterministic aspect of the surroundings can be expressed with OWL-DL, not covering dynamic and time-impacted aspects.
+
+An extended example of OWL-S syntax is provided in the appendix section of the report, in the form of a practical example, for further reference.
+
+\subsubsection{WSML}
+
+Web Service Modelling Language (WSML) \cite{wsml_reference}, provides a set of semantics and formal syntax for the Web Service Modelling Ontology (WSMO) \cite{wsmo_reference}. On the effort of providing semantic annotation information regarding services, WSMO has been of significant impact along the OWL-S mentioned above. Both approaches aim to enable automatic discovery, execution and composition of services.
+
+To adequately explain WSML, linked relevant concepts will be first described, such as WSMO and Web Service Modelling Framework (WSMF). Subsequently, we will introduce the WSML layers and fundamental concepts.
+
+WSMO introduces a conceptual model composed by four top-level elements: Ontologies (provide terminology used to describe the relevant aspects of the domain), Web Services (computation entities accessing the domain services), Goals (client desires, to be fulfilled with Web Service executions) and Mediators (elements that solve interoperability problems). By doing so, it provides a conceptual grounding for both Ontologies and Web service descriptions. It is based on the Web Service Modelling Framework (WSMF) \cite{wsmf_reference}, which is then extended with formal language and ontologies. The main design principles upon which WSMO is build are the following: ontology-based, strict decoupling, web compliance (URI utilized for resource identification), importance of mediation (high heterogeneity must be handled), description over implementation (the executable technologies are decoupled from the semantic descriptions), role separation (between client needs and available services ) and description of Services over Web Services \cite{service_vs_web-service}.
+
+Strongly linked with WSMO, it is relevant to mention WSMF \cite{wsmf_reference}. WSMF is a European initiative to present a complete framework to cover the different aspects of Web services. The main goal is to achieve a scalable mediation service and maximal service decoupling. It is mainly composed by two projects: WSMO providing the service ontology for goal, mediator and Web service definition, and  Semantic Web-enabled Web Services (SWWS) \cite{swws_reference} acts as a description, discovery and mediation framework.
+
+When it comes to Web Service description, WSML is based on the same four top-elements of WSMO. Taking into account that the primary aim of WSML is to assess the applicability of different formalisms for SWS descriptions, it does not restrict to existing languages for such description, such as OWL. Instead, it uses formal methods to describe the goal and service semantics. Depending on the logic expressiveness, multiple variants (also referred as layers) of WSML are available: WMSL-Core, WSML-DL, WSML-Flight, WSML-Rule and WSML-Full. By having multiple layers, a conscious trade-off can be conducted between implied complexity (for ontology modelling) and expressiveness. Each variant will be briefly described and a visual representation of the variant stack provided.
+
+WMSL-Core is the least expressive of all the WSML layers, based on the junction between Horn and Description Logic. WSML-DL is a variant of the Description Logic that encompasses OWL. WSML-Flight provides rule language over WMSL-Core, based on logic-programming and has similar semantics to Datalog. WSML-Rule further extends WSML-Flight with Logic Programming and meta-modelling elements. Finally, WSML-Full unifies the aforementioned Description Logic and Logic Programming approaches, whose semantics currently constitute an open research issue. On the following image (Figure \ref{fig:wsml-layering}), those layers are stacked and compared, with regards to their underlying paradigms.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.55\columnwidth]{img/wsml-layering}
+\end{center}
+\caption{WSML layering}
+\label{fig:wsml-layering}
+\end{figure}
+
+After describing the approach bases and different layers that WSML offers, how services are annotated will be explained. In this case, the semantic specification is divided into goal, service capability and service interface definition.      
+
+First, the goal reflects the required WSML service and can be defined by using ontologies. The ontology will provide formal semantics that will declare the service parameters and transition rules. The transition rules will formulate what should change in the global state (context). The client access rules and groundings are also defined as goals. Even if purposes are not entirely fulfilled for a request scenario, clients can match with services that partially align with the requested goals.
+
+Second, the capabilities of the service are specified. The capabilities describe state-based functionalities of the service by scope: precondition (conditions over the provided input), postcondition (service execution results), assumption (global state requirement before execution) and effect (how the execution changes the global state). Also shared variables can be defined, shared between multiple capability scopes (ex. variables shared between pre/postconditions).
+
+Finally, the service interface is framed. It describes how the functionality of the service is achieved by coordination of multiple service providers (choreography, from the requester point of view) and communication patterns that allow that service to meet its capacity (orchestration, from the provider point of view).
+
+With regards to the available tooling and software support, there are multiple open source software tools for developing WSML services. Examples of such tools are WSMO Studio (available as Eclipse extension), WSML Rule Reasoner, WSML DL Reasoner, WSMO4J (reference API for building SWS compliant with WSMO) and WSMX (execution environment for dynamic matchmaking, selection and service invocation). However, WSML composition planners nor fully-fledged service matchmakers are yet fully implemented.
+
+We provide an extended example of WSML ontology, web service, goal and mediator syntax in the appendix section of the report, for further reference.
+
+\subsubsection{SAWSDL}
+
+Semantic Annotations for WSDL and XML Schema (SAWSDL) \cite{sawsdl_reference}, is the first step taken by the W3C towards SWS technology standardisations. It provides a common ground for the ongoing efforts on SWS frameworks, such the OWL-S and WSMO mentioned above. However, SAWSDL itself is not a complete technology that allows SWS automation (such as OWL-S or WSMO) but which enables extending WSDL with ontology pointers.
+
+As previously mentioned on the report, both OWL-S and WSMO provide semantic descriptions for Web services, but there was a lack of understanding in academia with regards to what precisely a semantic Web service should do \cite{sawsdl_reference}. However, it was agreed that providing semantic for those descriptions and building on top of WSDL \cite{sawsdl_why} should be encouraged. Following those premises, in April 2006 W3C organised a group to work on the standardisation of semantic annotations over WSDL. SAWSDL was the output of such work, providing an ontology-independent semantic annotation, as it represents semantic concepts as URIs. Therefore, RDF, OWL-S, and WSMO (or another service semantic annotation framework) can be used along SAWSDL for annotation.
+
+With regards to the Web service description layers, SAWSDL is located below the Semantic description layer (service semantics such as OWL or WSML) and on the top layer of the Non-semantic descriptions level (above WSDL). While WSDL describes services at a syntactic level (how do messages look), SAWSDL allows WSDL elements to specify their semantic. The figure below (Figure \ref{fig:serviceSpecificaitonStack}) provides a general view of the Web service specification stack by layers. 
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/serviceSpecificationStack}
+\end{center}
+\caption{Service specification stack. Technology examples on the left and stack-level name on the right.}
+\label{fig:serviceSpecificaitonStack}
+\end{figure}
+
+To allow the WSDL to ontology mapping of services, SAWSDL provides a set of syntactical constructs: modelReference, liftingSchemaMapping, loweringSchemaMapping and attrExtensions. Those constructs enable two extension forms: model references and schema mappings. They link to specific semantic concepts and define the data transformations that need to occur between the messages and semantic representations. The model references, link semantic concepts with XML elements from and schema, using URI identified semantic sections. About the data transformations, two central operations are available: lifting and lowering, which permit the communication between a semantic client and a Web service. The image below (Figure \ref{fig:sawsdl_lifting-lowering}) exemplifies lowering and lifting SAWSDL operations for a Web service.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.85\columnwidth]{img/sawsdl_lifting-lowering}
+\end{center}
+\caption{SAWSDL lifting and lowering flow.}
+\label{fig:sawsdl_lifting-lowering}
+\end{figure}
+
+When comparing the standardised grounding provided by SAWSDL between semantic descriptions and WSDL with the "thin" grounding \cite{owls_reference} mentioned in the OWL-S section, a clear improvement is achieved. With the "thin" (also referred as incomplete) grounding, WSDL operations map to OWL-S atomic processes, while properties are linked to input/output values. The main issue of such simple grounding is that services mapped in such manner can only be executed as direct invocations, as WSDL does not allow precondition and effects assignments to calls.
+
+With regards to the available tooling and software support, the W3C standardisation process requires every specification to be tested under implementation before full standardisation of it. Multiple open source tools are available; SAWSDL4J  \cite{sawsdl4j_reference} (for service development), Radiant (Eclipse plugin for semantic annotation) or Lumina (Eclipse plugin for service discovery) \cite{sawsdl_why}. Also privately owned tools for semantic data mediation, developed by IBM.
+
+Due to the verbosity of examples, readers are recommended to visit the official documentation \cite{sawsdl_online} for further reference on SAWSDL examples.
+
+\subsection{Service discovery}
+
+After presenting the technologies for semantic annotation of services, we will examine the different approaches to service discovery (also referred as matchmaking) on the Future Internet context. As mentioned in the background section, no single method fits all the contexts in which service discovery can be applied. Therefore a domain specific solution must be introduced. The section will mainly focus on the matchmaking approaches to service discovery, and semantic Web service discovery architectures.
+
+In the case of this report, FI context will be used to evaluate and analyse the available options. Future Internet scenarios are focused on automation, is hence crucial to leverage the aforementioned semantic annotation of services. When compared to traditional Web service coordination, the coordination of SWS must provide a more advanced level of automation, due to the present resource and device heterogeneity. Semantic annotation allows the modelling of applications to discover services that fulfil user-goals at runtime (emergent applications) by the aggregation of unforeseen resources.
+
+Apart from the automation requirements, FI context applications tend to be deployed on PEC environments \cite{prime_pec}, where high heterogeneity of devices and communication protocols are prevalent. To cope with that, the discovery logic must be moved towards the upper layers of the system stack. By shifting from network focused discovery towards higher-level context-oriented discovery, discovery boundaries are expanded from administrative domains and network infrastructures. Overlay networks \cite{p2p-overlay_reference} are a proven solution for achieving such abstraction.
+
+\subsubsection{Service matchmaking}
+
+Similar to the semantic annotation of services, the service discovery for semantically annotated services is accomplished through frameworks. On the following subsections, a general overview of the most relevant ones will be provided, highlighting their capabilities and tradeoffs. We will conduct the choice over the reference architecture's discovery service approach in later sections of the report; once a concrete motivating scenario has been presented with a set of requirements. The semantic service discovery frameworks to analyse will be OWLS-MX (OWL-S matchmaker), WSMO-MX (WSDL matchmaker) and METEOR-S WSDI (SAWSDL matchmaker). 
+
+Is worth mentioning that multiple types of service matchmaker frameworks exist: non-logic, logic and hybrid. The previous list has been selected as they each cover a service semantic annotation framework analysed in the previous section, therefore enabling a better technological match. On the following image (Figure \ref{fig:service-matchmaker-categories}), a broader view of the available frameworks is provided, giving a high-level categorised selection.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.65\columnwidth]{img/service-matchmaker-categories}
+\end{center}
+\caption{Service matchmaker frameworks by categories.}
+\label{fig:service-matchmaker-categories}
+\end{figure}
+
+On the image below, the presented frameworks are (top to bottom): DSD-MM \cite{dsd-mm} , iMatcher1 \cite{iMatcher1}, HotBlu \cite{hotBlu}, OWLS-UDDI \cite{owls-uddi}, SDS \cite{sds}, GLUE \cite{logic-matchmaker-glue}, ROWLS \cite{rowls}, iMatcher2 \cite{iMatcher2} and FC-MATCH \cite{fc-match}.
+
+Logic-based semantic service matchmaking approaches, execute deductive reasoning over service semantics \cite{logic-serviceDiscovery_reference}. The semantic descriptions of services are compared at either design or run-time. The matching levels \cite{logicReasoning_levels} can be: exact, plugin, disjoint and subsume, and their definition varies based on the applied logic theory and service semantics.
+
+Non-logic based approaches, perform the matchmaking without logical inferring over service semantics. In this case, the level of matching is extracted from syntactic similarities, graph matching and concept-distance computation over ontologies. The implicit semantics are exploited rather than the explicit ones. An example is DSD (DIANE Service Descriptions) matchmaker \cite{DIANE_object-oriented-service-matchmaking}, which executes graph matching (returning a degree of match) over object-oriented service description state-sets.
+
+The hybrid matchmaking approach combines the previous two methods. By doing so, the generated matchmaking outcome can outperform the pure counterparts (either logic or non-logic based). An example of this is OWLS-MX \cite{owls-mx_reference} that merges text-similarity comparison with logic-based reasoning. If the text-similarity for a given query exceeds a predefined threshold, the service will be classified as relevant, even if the logic-based reasoning has failed.
+
+Semantic process-model matchmaking is also possible, although the creators of SWS formats did not directly enable that. For example, the process model semantics of both OWL-S and WSML have not been formally defined, and SAWSDL does not provide any process model. Intuitive mapping to workflow process models can be applied, even if the generated mapping cannot be entirely complete \cite{owls-process-model-intuitive-mapping}. In this approach, the expected operational behaviour of a given service is assessed, regarding data and control flow.
+
+As a part of the analysis, we will provide more in-depth information about some of the available matchmakers. The primary goal is to provide a general idea about how matchmaking is tackled by different approaches: OWLS-MX, WSMO-MX \cite{wsmo-mx_reference} and METEOR-S WSDI \cite{meteor-s_wsdi}.
+\\
+\\
+\textbf{OWLS-MX}
+\\
+
+OWLS-MX will be the first semantic matchmaker framework to analyse. It provides matchmaking capabilities for OWL-S services. As previously mentioned, it provides hybrid capabilities by combining logic-based reasoning with token-based syntactic similarity comparison. The following will only be executed once the logic-based fails. 
+
+The main reason for choosing a hybrid approach is that pure logical reasoning does not match the reality that the Web provides \cite{reasoning-web-scale}. The reasoning and information gathering are a resource (computation, time) bounded actions, and due to that, it is not possible to infer real optimal choices but to conduct incomplete reasoning.
+
+As previously mentioned, OWLS-MX supports logic-based matching with non-logic information retrieval. It is focused on service Input/Output matching while ignoring the logical service specifications. The service matching is provided in degrees: exact, plug-in, subsume, subsume-by match, logical fail, hybrid subsumed-by match, nearest-neighbour and fail. Each of those matching degrees will be shortly described below.
+
+An exact match occurs when a service S perfectly matches the given request to R. That means that the I/O signatures of both are identical.
+
+Plug-in match is achieved when the Input of the request is part of a more-specific subset of service S's Inputs. If the OWL input concepts can be mapped to similar WSDL messages of inputs, this match occurs.
+
+Subsume match is similar to plug-in match. However, it differs from service output, as the returned service's output is more specific than the requested by the client. 
+
+A subsume-by match is when request R is subsumed by service S. This occurs when the service provides a more general data-output than the request. In order to select services that provide too general data for a given request, direct parent relations are considered only. That said, depending on the application context and use case, that restriction may be relaxed, also considering the granularity of the underlying ontology.
+
+Logical fail happens when the service can not match the request in any of the aforementioned matching levels. 
+
+Hybrid subsumed-by match complements the previous subsumed-by logic filter with syntactic matching. The syntactic matching is executed following a predefined text similarity comparison approach.
+
+Nearest-neighbour in a purely non-logic match, conducted by checking the syntactical similarities of inputs and outputs between the request and the service. Is only executed once all the previous matching approaches have failed. 
+
+The final matching degree is the failure. As the name suggests, after all the previous filters are passed with failure, failure is the final status. Service S does not match request R in any of the matching degrees.
+
+When the previous matching levels are sorted according to semantic relevance, the following structure is created (Figure \ref{fig:owls-mx_semantic-relevance}).  
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.55\columnwidth]{img/owls-mx_semantic-relevance}
+\end{center}
+\caption{OWLS-MX matching levels according to semantic relevance.}
+\label{fig:owls-mx_semantic-relevance}
+\end{figure}
+
+OWLS-MX returns a set of services that fulfil a given request based on an individual matching level. The client can set the syntactic similarity threshold and degree of matching that requires. To accomplish that, every published service and requests are classified extending a given initial ontology into the matchmaker ontology. Input and output values are mapped and simplified to that initial ontology and information about services that use those I/O are also stored. Once the logical concept mapping fails, the hybrid matchmaking kicks in, applying hybrid subsumed-by and nearest-neighbour matchings.
+
+With regards to the performance of this framework, OWLS-MX expends a significant amount of time processing the I/O off new services and registering them into the matchmaker ontology. Also, the query response times are about 10s for 582 service use cases, which prove that there is room for improvement performance wise \cite{owls-mx_reference}. 
+
+Related to the validity of the matching results, they are false positive and negatives in both logic and hybrid approach \cite{owls-mx_reference}. That said, the OWLS-MX hybrid matchmaker for OWL-S has been successfully applied on real-world use cases, proving the matchmaker validity and community support. An example of this is the eHealth and repatriation planning system Health-SCALLOPS \cite{scallops}. 
+\\
+\\
+\textbf{WSMO-MX}
+\\
+
+WSMO-MX \cite{wsmo-mx_reference} is also a hybrid semantic matchmaker, in this case for services written in WSML-MX. WSML-MX is a WSML-Rule variant that enables the precondition and postcondition matching for object-oriented descriptions. Instead of a layered matching approach, recursively several different matching filters are applied and then aggregated into a single evaluation-matching vector. A global goal to fulfil is also specified, which will be further used in the matchmaking process.
+
+The algorithm executes the request against a local knowledge base, with the guidance of a client-specified configuration file. WSMO-MX considers the precondition and postcondition states of each published service from its local knowledge base and then compare them in pairs against the given goal.    
+
+The previously mentioned seven matching levels are equivalence, plug-in, inverse-plug-in, intersection, fuzzy similarity, neutral and disjunction (failure). To explain the different matching levels, the goal description (G) and the service description (S) will be used.  
+
+In equivalence level, G and S precondition and postcondition are entirely equal. In the plug-in level, G is part of an equal-subset to S in the precondition, and for the postconditions, S is an equal-subset of G. At the inverse-plug-in level, G is an equal-superset of S for precondition and S, an equal-superset of G for postconditions. At the intersection level, G intersects with G at both pre and postconditions. Fuzzy similarity,  pre and postconditions for G and S are similar. Finally, disjunction means failure to match, caused by non-intersection of G and S.
+
+WSMO-MX internally first executes a parameter matching (derivative comparison of I/O parameters). Then, it executes the semantic matching filters: type (the degree of semantic relation in the matchmaker ontology), constraint (performed by relative query containment) and relation matching (by recursive name matching). Finally, the syntactic matching filters can be applied. They are optional as they can be compensative (if one of the previous filters fails) or complementary (to enrich the previously computed matching result).
+
+WSMO-MX provides a more fine-grained parametrisation than OWLS-MX, and it also provides faster performance than purely logical-based matching. Property parametrised pure syntactical matching can keep up with the performance levels of logic-matching and also outperform it \cite{xsmo-mx_evaluation}.
+\\
+\\
+\textbf{METEOR-S WSDI}
+\\
+
+METEOR-S Web Service Discovery Infrastructure (METEOR-S WSDI) \cite{meteor-s_wsdi} is the last semantic matchmaker to analyse in this section, tailored to provide a scalable infrastructure for semantic discovery and publication of Web services. In comparison with the previously analysed OWLS-MX and WSMO-MX, the former tackles the challenge of dealing with potentially thousands of Web service registries, at a broader scope level.
+
+It focuses on Universal Description Discovery and Integration (UDDI) \cite{uddi_reference}, which is not tied to any Web service description format, by adding a semantic description to existing UDDI-defined services. By using domain-specific ontologies, the implied semantics by service description structures are made implicit.  
+
+To accomplish the goal of making the service scalable to thousands of unique service registries, the framework provides a decentralised approach based on peer-to-peer networks and registry operator agents, which help with scalability. Services are categorised into registries based on domains, and each domain is decoupled from each other, allowing to follow distinct ontology and matchmaking approaches for each domain.
+
+The high-level architecture of METEOR-S WSDI is divided into four main sections: data layer, communications layer, operator services layer and semantic specifications layer. Clients access the registries through the operator layer, abstracted from the low-level details. The layers are displayed in the figure below (Figure \ref{fig:meteor-s_wsdi_high-level-arch}). Note that the semantic specification layer is orthogonal to the rest.     
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.8\columnwidth]{img/meteor-s_wsdi_high-level-arch}
+\end{center}
+\caption{METEOR-S WSDI high level layered architecture.}
+\label{fig:meteor-s_wsdi_high-level-arch}
+\end{figure}
+
+The data layer is composed by the Web service registries. Is the lowest level layer in the architecture and UDDI is used. No change to the original UDDI services is made, and due to that, semantic operations over the services are only available through the previously mentioned operator layer. That said, the real UDDI services are still accessible.
+
+The communication layer provides the infrastructure for the intra-communication between the distributed components. All the components in METEOR-S WSDI are considered peers and four types exist: operator peers (maintain registries), gateway peers (entry points for entry points entering the system), auxiliary peers (provide registry ontologies) and client peers (transient exploiters of the provided capabilities).
+
+The operator services layer is responsible for keeping the services provided by operator peers in the registry. It allows that clients access services over a layer of abstraction, hiding the semantic service details. Service discovery from the client side is accomplished with templates, which are then communicated to the operators, which translates them to the registry specific format.
+
+The semantic specifications layer enables the use of semantic metadata over the UDDI services. Semantics are added on top of both Web services and registries using ontologies. This allows fine-grained access and querying over services in a scalable manner, detailed below.
+
+With regards to the framework implementation, is worth mentioning that the peer to peer network has been implemented using JXTA \cite{jxta_reference}. JXTA peers connect using pipes and allow runtime pipe binding. By using JXTA, METEOR-S WSDI is kept platform and device independent, which enables broad interoperability.
+
+METEOR-S WSDI enables two options for matching the constructs (between WSDL to domain-specific ontologies) that serve for service publication and discovery. Those mappings are made using tModels and Category bags and annotated in UDDI. Manual and semi-automatic mappings are available, the second one leveraging the SAWSSDL algorithm mentioned before.
+
+\subsubsection{Service discovery architectures}
+
+Once we have presented the central concepts about the service matchmaking approaches and frameworks, it is important to frame them into an architectural context. Systems are usually meant to be run in a real-world-like environmental, therefore is essential to analyse higher-level architectures than pure matchmaking.
+
+As previously mentioned, one of the critical pillars of FI is the decentralisation of resources (by Edge Computing). This brings a whole new set of challenges to be considered, as the resources to annotate and services to discover are no longer part of a controlled centralised architectural entity. 
+
+To successfully enable and implement service discovery capabilities on systems deployed in such environments, it is crucial to leverage existing Semantic Service Discovery architectures. Such architectures can be broadly categorised as centralised or decentralised. The division is made with regards to how the service registry storage and peer location are handled. On the figure below (Figure \ref{fig:service-discovery_arch-1}), the aforementioned categorisation is exemplified, by providing some key features of each category. Each category will be more in-depth explained shortly after.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.8\columnwidth]{img/service-discovery_arch-1}
+\end{center}
+\caption{High-level Semantic Service Discovery architecture categories.}
+\label{fig:service-discovery_arch-1}
+\end{figure}
+
+On the one hand, centralised Service Discovery architectures \cite{service-discover_centralized-and-p2p} are the most common approach. By keeping a centralised service registry and managing the service discovery between peers and super-peers, the implementation is simplified. The lookup time for services matching a query is also low, thanks to the centralised registry. However, by doing so, a single point of failure is introduced. In case of super-peer failure, the capabilities of the systems are significantly reduced, and that can only be partially mitigated by applying caching and replication. The potential scalability of such systems is limited when the offer and demand of services grow significantly. The previously mentioned music-sharing system Napster is an example of a centralised P2P service discovery system.
+
+On the other hand, decentralised Service Discovery architectures \cite{service-discover_centralized-and-p2p} keep a distributed storage of the service registry. As the registries are distributed among all peers, decentralised architectures can be divided following traditional p2p network topologies: structured, unstructured and hybrid. On the following image (Figure \ref{fig:service-discovery_arch-2}), the characteristics of each subcategory are highlighted.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/service-discovery_arch-2}
+\end{center}
+\caption{Decentralized Service Discovery architectural subcategories.}
+\label{fig:service-discovery_arch-2}
+\end{figure}
+
+Structured Semantic Service Discovery architectures, heavily rely on a predefined network's structure (topology), even if no central service-registry server is present. When resources are added to such systems, they are not distributed randomly between peers, but into specific locations. The system service index is distributed among all peers given an overlay, which will be exploited for querying. The overlay can be structured following hierarchical or flat organisational approaches. On hierarchical overlays, such as P-Grid \cite{p-grid_reference}, peers are organised in domain-oriented groups, managed by super-peers (the super-peer is typically assigned at runtime). On flat overlays, such as Pastry \cite{pastry_reference}, queries follow a key based-routing, which requires that the joining/leaving resources must update the registry of the responsible resolver peer.
+
+Unstructured Semantic Service Discovery architectures, do not rely on a structured network overlay. When peers join the system, they held no information about the services or other peers available on the system. Resources are to be located dynamically, usually following network-flooding techniques. On such techniques, a peer broadcasts an information request to the peers with some range parameters, until a successful match is generated. Flooding allows high network resiliency, but can also generate high loads of traffic depending on the system size and peer access pattern. An example of this approach is PULSE \cite{pulse_reference}, an adaptive live streaming system for unstructured p2p networks.
+
+Finally, Semantic Hybrid Service Discovery architectures combine the two previous approaches. As an example, flat data-hash tables (for finding rare resources) can be combined with flooding techniques (for finding replicated resources), such as in \cite{hybrid_service-discovery_reference}. That said, it is yet unknown which hybrid service matchmaking can scale best for the needs of the Web as a whole. As each system use case will propose different variability and specific constraints, it creates the need to adjust and evaluate the solution for each specific situation.
+
+\subsection{Interest-based dynamic grouping}
+
+The final topic we will cover in the literature review section is the interest-based dynamic grouping of services. In order to design content-centric applications, where services are to fulfil user-goals at runtime, it is crucial to support automatic aggregation and grouping of services. Static (design-time) service grouping in grid-computing scenarios have been researched \cite{soa_grouping_workflow-execution}\cite{owl-ws_grid-grouping}, although interest-based dynamic grouping of semantic services constitutes an open field of research \cite{prime_pec}.
+
+The interest-based grouping is made possible thanks to the annotation of services and the service discovery capabilities described above. Without those, the grouping would not be feasible, as it relays on interservice communication and discovery of services.
+
+By grouping the services under the same context, multiple advantages are generated. Under FI environmental conditions, where services are heterogeneous, dynamic and mobile, it allows higher scalability, resiliency, and eases management. It also allows for applications to include group-specific features, such as group messaging, scalable contextualised searching by groups, location-awareness at overlay level and so on. 
+
+To better analyse the interest-based dynamic grouping solutions, we will analyse the following aspects: service grouping, interest definition and interest-based groupings. While a general idea about such topics will be provided, the analysis will be focused on their application in FI environments. 
+
+\subsubsection{Service grouping}
+
+In order to enable dynamic interest-based service (resource) grouping, once the interests are adequately annotated, it is crucial to define and choose suitable service grouping approaches. Aligned with the first pillar of FI, the Internet by and for the People \cite{futureInternet_cross-ETP-vision}, dynamic creation of knowledge-sharing virtual communities (groupings) is critical. By leveraging automatic knowledge acquisition and reasoning, higher value to users is provided by intelligent service composition and contextualization.
+
+Taking into account that FI envisions an environment where resources are to be ubiquitous, dynamic and decentralised, such groupings are to be accomplished over the network and often as an overlay structure \cite{CASCOM}. Those groups remain as virtual entities, as the underlying network topology of the system under constant change. By doing so, great flexibility is achieved, as groupings can be abstracted from their physical topologies towards goal-defined and coordinated entities.
+
+When grouping services, it has been mentioned that groups are often created aligned with grouping policies, also referred to as goals. Such goals represent the main intent of the subset of services of the group, which can significantly vary. When engineering content-centric applications, resources are to be grouped following content-related goals (ex. grouping together nodes that consume the same type of resources). However, resources can also be grouped by applying a set of more arbitrary constraints, such as location-based information, inner properties, live-cycle status... The set of defined goals will most likely vary from application to application, so the goal is to analyse the main approaches to decentralised service grouping, without focusing on goal definition. That will be developed in the Implementation section, as the reference architecture for the motivating scenario is presented.
+
+Non-dynamic grouping is quite trivial to achieve when compared to the dynamic counterpart, as resources are categorized at design time, and have reduced mobility. When dealing with dynamic grouping scenarios, resources will most likely evolve, either by changing location, properties or provided capabilities. The primary challenge in those cases is how to build systems that provide dynamic groupings over unforeseen resources, deal with duplication, automatic group management and group roles.
+
+Under the analysis of dynamic groupings, two approaches will be discussed in detail: coordinated and biological groupings.
+\\
+\\
+\textbf{Coordinated grouping}
+\\
+Coordinated grouping approaches to dynamic service grouping (also referred as supervised), are exemplified by A-3 \cite{A3_reference}. A-3 aims to simplify the coordination of highly dynamic and distributed systems by group abstraction. Systems with a high number of components are abstracted and managed as coordinated groups, simplifying management. Revisions of this approach \cite{a3-tag_reference} have been conducted, providing a unified programming model that eases system design. We will briefly explain the insides of the aforementioned A-3 framework, for providing a more concrete contextualization of the coordinated grouping.
+
+This specific framework leaves the grouping policy open so that the system designer can set it. Systems are composed of combining components and connectors, to form specific configurations. Such combinations can be either programmatic or declarative, depending on the use case.
+
+Groups are composed of supervisors, supervised components and connectors. Supervisors represent entire groups in the system and broadcast information to the supervised components within the group (by broadcast, multicast and unicast). Supervised components provide relevant information to the group supervisor. Connectors are responsible for the binding between the previous two, in the form of asynchronous messaging. The basic elements of a group are shown in the image below (Figure \ref{fig:a-3_basic_elements}). The displayed hierarchy is composed of three groups, two of them subsumes of the other. It is important to note that the nodes which supervise the two lower groups in the hierarchy, simultaneously take the role of supervisor and supervised components. A node can also be part of two or more groups at the same time, depending on the use case.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=0.95\columnwidth]{img/a-3_basic_elements}
+\end{center}
+\caption{Basic elements of an A-3 group, inside a three group hierarchy.}
+\label{fig:a-3_basic_elements}
+\end{figure}
+
+With regards to system architecture in A-3, it can be configured in multiple ways: by hierarchical composition (previous figure), by bidirectional hierarchies and shared supervised components (Figure \ref{fig:a3_hierarchies}). It is important to mention that the architecture of choice will be dependant on the use case in hand.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/a3_hierarchies}
+\end{center}
+\caption{Shared with supervised component and bi-directional hierarchies.}
+\label{fig:a3_hierarchies}
+\end{figure}
+
+In order to provide grouping capabilities, the Java reference implementation of A-3 is composed of two main layers: the discovery manager and the group manager. The application specific logic is extracted to a superior abstraction layer. 
+
+With regards to the management of the dynamic coordination, A-3 proposes three options: direct access from a supervisor to the underlying low-level groups API (JGroups), direct access from a supervisor to the underlying group configuration by a set of high-level APIs, and describe the desired configuration at design time. The proposition of those different approaches brings the focus to the challenge of automatic dynamic group management. Even if the first two direct access solutions enable grouping, desired configuration declaration at design time is beneficial, as it abstract the lower-level group management.
+\\
+\\
+\textbf{Biological grouping}
+\\
+Other approaches are inspired by biological patterns, such as Myconet \cite{myconet_reference}. Instead of modelling the coordination, the organisation of the systems emerges from the components themselves. Components follow a defined behavioural pattern inspired by biological systems, which provide with self-organising capabilities.
+
+Myconet applies a fungi-inspired grouping model, generating a super-peer overlay network.  By following a biologically-inspired model, properties such as self-organisation, emergent adaptation and resilience are introduced. In this case, super-peers are used to reduce the system's network diameter and increase communication efficiency between resources.
+
+Following the vegetative growth patterns of the \textit{hyphae}, peers contain a discrete amount of biomass from which the grouping will grow, selecting interconnected super-peers. This approach applies well to large-scale p2p networks, where a general view of the systems is not held, and notably dynamic peers are to coexist.
+
+Although this approach has proven to be scalable, robust and able to handle component malfunction, it has been criticised for its lack of proper design approaches \cite{a3-tag_reference}. Myconet, for example, arranges the system of nodes following a biomass-based growth pattern. Such growth is only development in one dimension, disregarding more fine-grained community and interest definitions than the pure numeric value (biomass amount per node).
+
+\subsubsection{Interest definition}
+
+User interest definition has been a topic of research for many years. With the proliferation of e-commerce platforms and folksonomies \cite{semantic-interest_modelling_folksonomies}, recommender systems have been trying to increase the user profile depth. The broader (cross-domain) a user profile is, better recommendations will allow and therefore provide higher value to services and businesses.     
+
+To annotate user interests accurately, first, what interest means needs to be clarified. Interest is defined as "the feeling of wanting to give your attention to something or of wanting to be involved with and to discover more about something" by the Cambridge dictionary \cite{interest_cambridge_reference}. Inside the context of user interest, in addition to the topic of interest, often the levels of interest are also modelled as vectors. The degree of interest is extracted from either explicit or implicit actions \cite{inferring_user_interest}. Some approaches also consider time-data as a relevant part of the interest information \cite{user-interest_owl-foaf}. In the context of the thesis and to manage the levels of complexity, interests are defined as a set of topics significant for a given user. Users interest can evolve, allowing the coexistence of users with (sub)sets of common interests.
+
+However, providing a cross-domain (interoperable) interest definition is not without challenges. Interoperability requires a standardised representation of those interests, which can be solved by using formal definitions (ontologies). Different approaches use ontologies to model interest \cite{user-interest_owl-foaf}, as opposed to other interest definition methods (star-rating, tags), it allows querying interests at the domain level, and not only by syntactic string comparison. Other important reason to choose the ontology interest definition approach, is that often categorisation (grouping) of the interests in classes is required, in use cases such as interest-based user grouping or graph-like interest representations. 
+
+Below, the main layers supporting user interest definition are introduced. The goal is to illustrate the set of steps to take to construct interests. First, the different approaches to interest annotation are introduced and second, we explain how those interests can be modelled. 
+\\
+\\
+\textbf{Interest annotation}
+\\
+As we previously mentioned, interest can be represented in multiple ways. We will deepen a bit into the two predominant ones: tag \cite{interest-tag_music} and semantic annotation \cite{foaf_reference}.
+
+Tag-based annotation relays on the use of sets of strings to define an interest. Those tags can be user-defined, but are often related to the underlying application-context. They provide a flexible and easy to compose multidimensional interest-definition vectors. N being the amount of unique tags in a specific application or domain, a specific interest of a user can be represented as multidimensional vector of N dimensions. Tags are generally boolean, meaning that they express either interest or non-interest, without specific intensity vector or complex time-related data. On the following image (Figure \ref{fig:interest-tags}) we propose an example of tag-defined interests for a user.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/interest-tags}
+\end{center}
+\caption{Sara in interested in crusty apple pie (\textit{Interest 1}) and Spider-man comic books by Stan Lee (\textit{Interest 2}).}
+\label{fig:interest-tags}
+\end{figure}
+
+With regards to the vectorial representation of those tag-defined interests, it will depend on the number of unique tags in the system. In the use case of Sara, six unique tags are used. Therefore, the system will represent the interest using six boolean dimensions. In the following table (Table \ref{tab:vectorial-representation-tags}), we exemplify such vectorial representation.
+
+\begin{center} 
+\begin{table}[ht] 
+\begin{center} 
+\begin{tabular}{ccccccc} 
+\hline 
+Interest & Pie & Apple & Crusty & Comic Book & Spiderman & Stan Lee \\ 
+\hline 
+\textit{Interest 1} & 1 & 1 & 1 & 0 & 0 & 0 \\ 
+\textit{Interest 2} & 0 & 0 & 0 & 1 & 1 & 1 \\
+\hline 
+
+\end{tabular} 
+\end{center} 
+\caption{Vectorial representation of the previously introduced Sara's interest. Note that boolean values are represented using integer notation (true 1 and false 0).} 
+\label{tab:vectorial-representation-tags} 
+\end{table} 
+\end{center} 
+
+With regards to the namespace of the tags, as we previously mentioned, unless limited by the application, it does not directly map to the application context. This does not present an issue to compare users based on their interests, as vectorial comparisons can be applied and users clustered based on those \cite{interests_conceptual_clustering}. However, it hardens the stardarization of terms for interests representation, as different users may represent virtually the same interest with different tags. Available tools like Wordnet \cite{wordnet_reference} can be used to conduct such stadarization process, but the results are not allways exact \cite{connecting-similar-interests_over_web-services}. Aside from that, tags do not contain any hierarchical or relational structure between them. Therefore, by combining tags arbitrarily, non-sense interests can be defined: Ana is interested on crusty apple Spider-man, which makes no sense (to a human reader). The tag-approach also fails to represent complex interests with logical operators such as and, or or not.
+
+After presenting the tag-annotated interest, we will mention the semantic annotation approach. Semantically annotated interests relay on ontologies and provide contextualized, hierarchical and relational information. By defining all the interests within a system upon the same ontology, one-to-one interest comparison between users is achieved. Another advantage of using ontologies for interest definition is that it is possible to annotate the resources that fulfil the interests using the same ontology as the interests. This provides substantial advantages with regards to resource/interest matching and comparison.
+
+Other important benefit is the granularity of the defined interests. When constructing the interests following ontologies, aside from the concepts, the predicate relations between subject and objects is stored (ex. when using triples). A ontology example for user-interest annotation is the ODP web directory, now replaced by Curlie \cite{curlie_reference}. It provides a hierarchic view of web pages, and has been used as an ontology for representing user interests in \cite{extract-implicit-interests_from_search-history}. Another option is to construct a custom interest-defining ontology, as done in \cite{user-interest_owl-foaf}. The main drawback of semantically annotating interests, either by using existing interest-contextualizing ontologies or creating a new one, is that the interest definition is bounded to the underlying ontology (defined at design time), severely limiting the expressiveness of interests.
+
+It is worth mentioning that ontologies have also been applied successfully to recommendation systems, allowing to solve recommendation cold-start, and interest acquisition issues \cite{ontology_recommneder-system}. It proves that recommendations of interests are also successfully modelled with ontologies.
+\\
+\\
+\textbf{Interest modelling}
+\\
+Regardless of the form chosen for annotating the user interests, they are different approaches available for the modelling of those interests. Knowledge-based, behaviour-based and hybrid modelling are the main exponents.
+
+Knowledge-based interest modelling generate static interest models and then match the users to the nearest model instance. Well-suited for environments that do not change, it fails to scale for the FI scenario properly. In a context where unforeseen resources and users are constantly interacting, an entirely static user-interest categorisation does not fulfil the dynamicity requirement. An example of knowledge-based interest modelling would be: first, designing three interest groups (books, movies, music) and then sorting the users into the aforementioned interest groups.
+
+The behaviour-based interest modelling does the contrary. Instead of creating a set of interest-profiles (groups) at design time, the groups are inferred from the user behaviour. Those groups get composed at runtime, and they may not map to concrete knowledge terms (such as movies or books). In the process of behaviour-based interest modelling, users are clustered based on similar behaviours. This approach is used to binary represent the interests and recommend new interests, based on cluster-neighbours similarity.
+
+Hybrid interest modelling \cite{user-interests_hybrid-recommender} combines the previous two approaches. Instead of a purely design-time grouping definition or extraction from the user behaviour, it merges both. This is achieved by combining the application domain knowledge (represented with ontologies) with supervised behavioural clustering. Doing so, the process of generating user profiles (user interests)  is enhanced by the domain knowledge. It is also more flexible with regards to the group creation, which will be dynamically generated.
+
+\newpage
+\section{Implementation}
+
+In the following chapter, we will present the current status of the PRIME middleware \cite{prime_approach} and the proposed architectural extension of PRIME. Once we analysed the literature regarding the formulated research questions and acquired the appropriate knowledge, we introduced the application motivating scenario (\textit{Social Library}) form which to extract a set of functional requirements. After extending the PRIME middleware to support the research questions, those requirements will serve as a base point for assessing the validity of the approach.
+
+As we mentioned previously in the "Method" section, the current status of PRIME will be qualitatively assessed from the software engineering standpoint. That means, how does PRIME support the construction of content-centric FI applications, by evaluating it against the functional requirements from the motivating scenario.
+
+\subsection{Current status of PRIME}
+
+Once we have introduces the motivating scenario with an example application, we will describe the current status of PRIME. The current status presentation is composed of the review of the general features and high-level architectural view. After assessing the status, we will propose an architectural extension to support the open research areas introduced by the research questions. On the later section of the report "Evaluation", the architectural extension will be assessed against the motivating scenario requirements.
+
+The PRIME middleware also referred as the PRIME approach, defines an architectural style based on modelling and programming abstractions to uniformly represent resources and develop FI applications with opportunistic resource aggregation. Among the different available approaches, we have chosen PRIME for a set of reasons: 
+
+\begin{itemize}
+\item Clear modelling abstraction for handling resources in FI. Separated from the underlying implementation.
+\item Proven academic usage. Used for multiple courses at Linnaeus University,in Växjö Sweden.
+\item Under active development.
+\item Direct access and open feedback from the maintainers, enabling proactive iteration over the design extension.
+\end{itemize}
+
+In order to cope with the challenges that the FI environment presents, PRIME enables resource abstraction and resource contextualization. We will briefly describe them from a high-level perspective. 
+
+By resource abstraction, it supports the interaction between different types of resources. To provide that uniformed abstraction layer, it uses P-REST (Pervasive REST). The nodes that conform PRIME architectures are considered as prosumers, both resource consumers and producers. A resource is anything (referred as service on the FI context) exposed through the network, may it be data or a business-process. In contrast with REST, P-REST provides asynchronous message passing capabilities, distributed DNS, lookup service and Observer-pattern based coordination model. Within P-REST, the PRIME resources are identified using an abstract and concrete URI. The abstract URI (aURI) is directly mapped with the application context ontology and defines the type of the resource. The concrete URI (cURI) represents the resource itself, unique per each resource and is used to uniquely access resources within a system where PRIME is deployed.
+
+Once the mechanisms for resource exchange have been set, resource contextualization is tackled. It covers the issues presented by the first two research questions, the ability to understand, discover and select resources of interest, semantically. Semantic matchmaking is leveraged in this case, by annotating resources with ontologically described information. In PRIME, both the application context ontology and resource semantics are defined with RDF: subject, object and predicate triples.
+
+At a high-level, the architecture of PRIME can be divided into four main sections: the low-level wireless communications,  the communication layer, the API programming layer and the user application. The architecture is detailed in the following image (Figure 4.23) and each layer is shortly explained below.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/prime_architecture_old}
+\end{center}
+\caption{High-level view of the current PRIME architecture.}
+\label{fig:prime_architecture_old}
+\end{figure}
+
+The low-level wireless communication layer sit at the lowest abstraction level and set the base for the PRIME middleware. It represents the communication level heterogeneity present on FI environments.
+
+The communication layer encapsulates the previously mentioned heterogeneity of FI environments, by providing a distributed asynchronous messaging mechanism. The middleware of choice for that purpose is RabbitMQ \cite{rabbitmq_reference}, the most popular open-source message broker at the time of writing. Each prosumer instantiates a RabbitMQ broker at runtime, joining an application-wide federation (cluster-less and loosely-coupled deployment mode of nodes). Depending on the resource types that each prosumer provides, multiple messaging queues are generated (one per each resource type) and both resource producer and consumers are subscribed to them. Those queues enable point-to-point and point-to-multipoint messaging between prosumers. Its important to mention that the communications conducted between PRIME resources are conducted over HTTP, following the REST principles. We will later elaborate on how the RDF matchmaking is accomplished, on the API programming layer.
+
+The API programming layer uses the capabilities provided by the communication layer to enable the aforementioned Observer-pattern, where a subject (prosumer) keeps a list of subscribed (also referred as the dependant) observers (also prosumers) that are notified every time the state of the subject is modified. Prosumers can directly access a set of resources by their abstract URIs and particular resources by concrete URIs. Those URIs are retrieved using the lookup service, fully distributed and RDF-inference based. The inference method used is forward chaining (data-driven), better suited for dynamic situations that are likely to change than backward chaining, as new data can trigger new inferences. When nodes enter the system, they are added to a distinctive messaging channel inside RabbitMQ (the "broadcast" channel), which enables the spread of the lookup query. On the upper section of the API programming layer, the PRIME application sets. A PRIME application is the logical constructs build on top of the middleware, where PRIME resources are declared and also serves as the entry point. The PRIME resources are the capabilities and services that the application exposes, which other applications will access (ex. business logic, assets...).
+
+The end user application and application-specific business logic are not bounded to the previously mentioned architectural layers, but access the capabilities through a thin interface layer, provided by the API programming layer. By doing so, the application specific code is loosely-coupled to the underlying PRIME middleware.
+
+To finalise with the explanation of the current status of PRIME, we will briefly define the inners of the a PRIME application initialization flow. This will help relate the different layers of the architecture with the actual system behaviour and expand the context for the architectural extension to formulate. The initialization of a PRIME application goes as follows:
+
+\begin{enumerate}
+\item Instantiate the PRIME app. Fire up the JVM and load dependencies.
+\item Load the resource descriptions (ontology descriptions) for each one of the resources of the application.
+\item Parse every loaded resource description and extract the relevant information, such as aURI, cURI, QoS and contextual information.
+\item Set up the lookup resolver by resource description, OpenRDF Sesame. It will resolve the SPARQL queries propagated through the system.
+\item Instantiate the asynchronous message broker RabbitMQ in federated mode.
+\item Subscribe the application to the system-wide broadcast communication channel "Broadcast".
+\item Per each resource type that the application exposes (represented by an aURI and mapped to a class inside the application specific ontology), subscribe the PRIME application to the type channel. Each channel is identified by the aURI defined on the design-time application context ontology. If the channel is non-existent, it is created. 
+\item Once the pre-resource subscription and creation of RabbitMQ channels, the application is ready to operate. Is important to note that the creation and binding of communication channels is conducted on-runtime, as the application encourages dynamicity.
+\end{enumerate}
+
+\subsection{Architectural extension of PRIME [TODO - complete redo of section]}
+
+% TODO - rethink and redo:
+
+% -> Redefine interest definition (based on RQ3)
+
+% -> Keep track of interest definition and groupings (distributed database, ex. "Cassandra")
+
+% -> UID identificaition of interest groupings. Link with application context.
+
+% Propose a comprehensive application-context ontology, detailed (with genres, actors...). Buil interests on top of that, probably by UID and channelling.
+
+After laying down the principles and explaining the high-level architectural design of PRIME, we will formulate an architectural extension. The main reason for this architectural extension is that PRIME provides a middleware to uniformly represent services (also referred as resources) and to develop FI applications around the opportunistic aggregation of resources. However, when it comes to the creation of content-centric FI applications, the interest-focused dynamic service grouping support is missing. 
+
+PRIME presents a firm base on which to build up an extension that copes with those requirements. Based on the proposed modelling abstractions and layered architecture of the middleware,  it will be extended to support interest-focused dynamic grouping of services. We will broaden the design by modifying the previously mentioned API programming layer. The layer in charge of communications will remain untouched, by keeping the service grouping and interests related concerns at the upper layer. The architecture schema is provided in the image below (Figure 4.24), and the additions to the architecture highlighted in orange.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/prime_architecture_new}
+\end{center}
+\caption{High-level view of the extended PRIME architecture.}
+\label{fig:prime_architecture_new}
+\end{figure}
+
+As we can see in the image above, the architecture will be extended at the API programming layer, by expanding the \textit{Prime Application} section and by adding the new \textit{Grouping} section.
+
+The \textit{Prime Application} section will expand to accommodate the interest definition along the resources. Conceptually we have placed the interest definition at the highest level of the API programming layer, as we consider that interests constitute the highest abstraction tier. Similar to resources, interests are tightly bounded to the application's context ontology. Lower-level constructs such as the groupings will be built around them, but they shall be defined (either explicit or implicitly). How we enable the interest modelling in the PRIME architecture extension will be deeper explained in the following subsection "Interest definition".
+
+Below the newly modified \textit{Prime Application}, we added a new architectural sub-layer, the \textit{Grouping}. The \textit{Grouping} tier is composed of two main concepts: the group creation and the group management. This layer manages all the related operations with the grouping of users (Prime Applications) based on goals. Taking into account that the topic of the thesis is to research how to engineer content-centric FI applications, the goals that bring the users together will be the interests. Interests quantify how the system users feel about resources, and provide information later leveraged for tailoring personalised and meaningful resources to users. How the grouping section has been solved will be explained in the following subsection "Grouping over interests".
+
+\subsubsection{Interest definition}
+
+After the extensive literature review about the different approaches on interest annotation and gaining the understanding of how PRIME's internal architecture is composed, we will propose an architectural extension for enabling interest definition. It is important to note that the architectural extension aims to be an evolution of PRIME towards the expressed requirements from the motivating scenario.
+
+Currently, PRIME annotates the available resources in the system by RDF triples, on top of the application-specific ontology. Over the conducted literature review, we have learned that RDF/OWL has been successfully extended with FOAF and by adding extra vocabulary \cite{user-interest_owl-foaf}. This approach has proven valid in literature for expressing the interests of users towards ontology entities, which differs from the motivation scenario. In an FI internet use case, the system will not have a complete resource ontology, as the system is to encounter unforeseen resources at runtime. An initial resource classification and a set of resource instances would be present at first, and it will adequate as the system resources evolve (new are added, changed and removed).
+
+This presents an unforeseen set of challenges for annotating the user interests. The motivating scenario presents a content-centric application, where users and their interactions pivot around the available content in the system. Interests over content are normally expressed in complex format over instances of resource types: \textit{"Sara likes terror movies directed by Hitchcock"}. Such semantic construct is composed of the following set of combined sub-interests:
+
+\begin{enumerate}
+\item Sara likes movies.
+\item Movies from the horror genre.
+\item Movies from Hitchcock.
+\end{enumerate}
+
+Those three distinct statements, when merged, compose one of Sara's interests. In RDF, relations are encoded in triples, and therefore the complex interest cannot be represented in one triple. On top of that, interests may cover unforeseen concepts (such as resources published on a given time-range), not defined on the interest defining ontology. Also, as the interests must be matched with the resources exposes by the running system (movie producers in this specific case), a triple representation is not enough. To solve this issue, we propose to express interests as queries towards resources.
+
+About the interest defining vocabulary, the interests vary depending on the context of the application. Interests can be declared over many things: people, material object, intangible resources... and their ontology should be adapted to best support each context. In the case of \textit{Social Library}, interests are expressed over: contents, subsets of those content types (ex. interest on horror movies), or abstract sets (ex. \textit{interest in Japanese movies and non-fictional novels by Stephen King}). In this case, and due to the dynamic nature of interest definition over content, we found the approach for the ontological definition of interests too brittle. 
+
+We propose to use a query language, SPARQL (as the resources are defined in RDF), so users can express their complex interests without ontological limitations. Queries allow deeper complexity, and they can also be constructed with machine-help. Also, by relying on the implemented semantic reasoner, PRIME applications can resolve SPARQL queries against their resources. In our approach, we propose to adopt the query construction by wizard approach \cite{nitelight_reference}. Users will construct the interest queries with the help of a graphical interface, similarly to \cite{graphical_sparql_reference}. The main advantages in comparison with the manual query construction approach are that it provides a more deterministic query construction and eases access for users not familiar with SPARQL. We will reason deeper about the disadvantages of non-deterministic query definition on the next subsection "Interest grouping".
+
+In order to provide a clearer view of how interests would be defined using SPARQL queries, on the following snippet, the query version of the previously introduced interest is shown (\textit{slo} stands for \textit{Social Library} ontology).
+
+\begin{lstlisting}
+SELECT * WHERE {
+    ?s a slo:movie;
+       slo:genre slo:horror;
+       slo:directedBy slo:hitchcock .
+}
+\end{lstlisting}
+
+Note that in the query, the ontology prefixes are hidden, the keyword \textit{a} is as a shortcut for the common expression \textit{rdf:type} and \textit{;} separate triples that share the same subject.
+
+As mentioned above, once the user interests are defined with queries following the vocabulary defined by the application context ontology, the PRIME application can be directly queried, and resources that fulfil the given query will be matched. As the queries will be constructed by users with the help of visual tools, its up the application designer to define how fine-grained, or complex the allowed interest definitions in the system may be. With regards to this topic, we firmly believe that each use case should be analysed and a desired interest-definition granularity level chosen.
+
+Finally, and in addition to the aforementioned advantages of using query-based interest definition within the PRIME architecture, by leveraging SPARQL, we enable the access of using other SPARQL based community tools that will greatly impact the handling of grouping construction and management. How the interests are handled in the context of grouping and resource management will be detailed in the following section.
+
+\subsubsection{Interest grouping}
+
+In the following section, we will detail how the interest-based user communities and resource management are handled. It is worth mentioning that this section of the architectural extension proposed the biggest design challenges.
+
+Once the wizard-driven user interest modelling is enabled by the extension of PRIME, the grouping sub-layer inside the API programming layer must be tackled. The goal of such layer is to enable the creation of content-centric applications. By content-centric, we refer to applications that provide greater value to users by aggregating, customising and providing extra features to users, based on the content available, such as the opportunistic creation of user communities based on shared interests. In the specific case of PRIME middleware on the \textit{Social Library} motivating scenario, that greater value provisioning is driven by the previously described user interests.
+
+We will divide our explanation of the grouping layer into two steps: the content distribution and interest-based user communities.
+\\
+\\
+\textbf{Content distribution}
+\\
+
+One of the main challenges in FI is the efficient content distribution. The existing approach of PRIME added all the resources to the "broadcast" channel, and then each type of resource to another channel, identifiable with the ontology-defined aURI. Despite the correctness of the approach, it did not allow fine-grained automatic resource subscription, as distinct resources of one type (ex. movies) were all part of the same group, regardless of the other properties (ex. director, actors, year of production...). It provided basic capabilities that required an extension.
+
+On the designed extension, we decided to maintain the asynchronous pub-sub model, as it made much sense in the context of distributed FI apps. By leveraging the query-defined user interests, we evaluated two main options: RabbitMQ channelling and semantic pub-sub model.
+
+At first, we envisioned the possibility of using the RabbitMQ inherent capabilities for topic-based channelling. Optimally, users defining interests would create an interest group, which would contain all the other users with the same interests and the producers of the resources that would fulfil the interest-query of such group. The novel user would join the system, and by broadcasting its interest-queries to all the nodes of the system, it would get a matching subset of nodes (resource producers) from which to build the group. In this approach, the content distribution was to be also accomplished through those groups. In the following image (Figure 4.25), a four-actor system is represented (Sara, John, Kim and Ron), which provide and express interests over books and movies.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/interests-channel-config_rabbit}
+\end{center}
+\caption{Example of channel configuration over interests in RabbitMQ.}
+\label{fig:interests-channel-config_rabbit}
+\end{figure}
+
+Even if the idea seems valid at first, we soon encountered some blocking points that would disproof the idea: 
+
+\begin{itemize}
+\item Lack of control over new PRIME applications that provide resources matching the defined group's interests. The set of resource-producers identified at the creation moment of the group would not automatically extend, and the new resource needed to be added manually.
+\item By keeping the interest-defining users with the interest-fulfilling producers (under the scope of one interest, as generally PRIME applications are considered prosumers) in the same group, all the updates of users and producers would generate traffic that all the subscribers of the channel would receive and filter. This would incur in poor network-resource usage, as resource producing nodes will not be interested in the human-to-human information exchange between interest-sharing users, for example.
+\item Linked with the previous point, in cases when a user defines a set of interests (N), it would be subscribed to (N) "general purpose" groups (combining user-to-user and producer-to-user communication), where all the users and producers would broadcast the data. We believe that such situation at scale could destabilise and collapse the network due to the generation of unnecessary traffic.
+\end{itemize}
+
+Aside from the RabbitMQ channelling specific issues, we also encountered that interest-defining SPARQL queries could vary syntactically, even if they both represent the same interest. This can be seen on the image below (Fig 4.26), where two equivalent queries that express the same interest over horror movies are shown. Note that the only difference is the naming of the query variable.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/sparql_query_comparison}
+\end{center}
+\caption{Syntactically different queries, with the same meaning.}
+\label{fig:sparql_query_comparison}
+\end{figure}
+
+Such small difference in the construction of the query, present great challenges. Alternatives \cite{sparql_comparison_alternatives} exit for SPARQL query similarity comparison in multiple dimensions: structure, language, content and result. The structure, language and content similarity comparison are usually applied to query pattern-recognition and clustering. However, in the context of our motivating scenario, we required query result comparison. If the same can be expressed by two syntactically different queries with the same result, then they must be considered similar. The issue with this kind of similarity comparison is that is an undecidable problem, only addressable when executing queries over the same data set. In the FI context, the resource set upon which the queries will be evaluated constantly changes, blocking this kind of comparison. 
+
+By defining the user-interests with the help of a wizard, the syntactical difference issue can be mitigated, but not completely suppressed. The duplicity of groups for the same interests would occur in this case, complicating the previously mentioned network over-usage issue even more.
+
+Secondly, we reconsidered the approach and decided for a semantic pub-sub model. A great example of this in literature is provided by SUB \cite{sub_reference}, a semantic pub-sub architecture for IoT, which uses SPARQL. This approach fixes the RabbitMQ channelling issues and provides a set of extra features.
+
+Instead of aggregating the users (consumers) with the resource producers in the same groups, SUB generates and manages user-specific subscriptions. Such subscriptions are expressed by a SPARQL query (one to one applicable to the existing SPARQL defined interests), and each user will receive optimized notification for its own set of interests. The previously shown example of four actors describing interests and resource would look like the following when adding SUB.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/sub_channeling}
+\end{center}
+\caption{Content sharing with with SUB. Interest definitions subscribe, and the resource producers update.}
+\label{fig:sub_channelling}
+\end{figure}
+
+We will not focus on SUB internals, but briefly highlight the features provided by this approach, which is the one we selected for content distribution.
+
+\begin{itemize}
+\item Efficient communication. Each user is subscribed to the changes in a set of resources matching a query. Also, the updates on those resources are sent as notifications, not as a full set, but with only the relevant changes. This reduces both the network overhead and processing-resource usage.
+\item Subscription over SPARQL queries. SUB manages the related resource update monitoring and gradual notification to subscribers.
+\item Explicit user groups are not created, and their life-cycle does not need to be managed, as SUB manages the underlying subscriptions. 
+\end{itemize}
+
+After presenting the content distribution approach, we will describe the interest-based community management.
+\\
+\\
+\textbf{Interest-based user communities}
+\\
+
+Once the users have the means to represent their content-interests and efficiently receive the updates for those interests, its time to cover the last piece of the grouping layer, the interest-based user communities. The coal of such communities is to bring together interest-sharing users and enable direct communication between them. 
+
+As mentioned before, deterministic query definition is an issue partially mitigated with the guided creation of interest definitions (through wizards). Correct query-result similarity assessment is not possible, so some assumptions have been made to construct those interest-based communities:
+
+\begin{itemize}
+\item Those communities are for human-to-human information exchange. Thus, they will act as interest-defined "chat rooms".
+\item Users can be part of multiple communities.
+\item User interest-defining queries are deterministic, with only one unique form per unique interest.
+\end{itemize}
+ 
+These communities will be generated opportunistically. That means that if a user defining a new interest (I), will create a RabbitMQ channel for the interest and subscribe itself to it. The second user that defines the same interest (I) will check if there is an existing channel for such interest, and join it, in case it previously exists. Following the assumption of deterministic interest representation, we use the query's unique representation of interest as the unique identifier of the group.
+
+Such unique identifier will be generated from the hashing of the interest defining query, which we assume is unique per interest (due to the wizard constraints). Doing so, new users who define interest can easily assert if there are communities for such interests (supported by RabbitMQ channels) and join or create if they are not existing. In the following image (Figure 4.28), the interest-defined community creation is exemplified, in a simple system. Three actors provide book and movie resources, and two of them are interested in books. The figure displays on the left side the RabbitMQ channels, and the resource, interest, SEB update and SEB subscriptions. The interest-defining query and the community's UID hash as also presented.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/interest-based_venn-diagram}
+\end{center}
+\caption{Example of interest-based RabbitMQ channel configuration and SUB roles.}
+\label{fig:interest-based_venn-diagram}
+\end{figure}
+
+The separation of the resource distribution (with SUB) and user communities creation brings efficiency with regards to the resource distribution and separation of communications (content distribution vs user-to-user informal exchanges).
+
+Last but not least, with regards to the inner-community communication between users, it would follow the schema provided by PRIME for RabbitMQ. All the interest-sharing users can unicast, multicast and broadcast the other members of the group. The interest group's lifecycle is user independent, in the sense that as soon as a user disconnects, it will stop being part of the active members of that specific community, and as soon as it connects, it will go back online. As the channels are federated, even if all the users of one community disconnect at the same time, the channel will not be lost as the active users of the system will keep track of it.
+
+\newpage
+\section{Evaluation}
+
+In this section, we aim to evaluating the validity of the architectural extension presented over PRIME, taking into account the support for the functional requirements of \textit{Social Library}. Each of the functional requirements of \textit{Social Library} will be analysed in depth and examples provided. We will also discuss the results of the research loop started with the research questions.
+
+\subsection{Architectural extension evaluation}
+
+Is important to note that this section will entirely focus on the compliance of PRIME to the functional requirements of \textit{Social Library}. We will not evaluate other aspects of the system, such as the ease of deployment, performance per middleware instance or choice of virtualisation platform (currently Docker \cite{docker_reference} is recommended). Despite the indisputable importance of those, the report aims to tackle issues and propose solutions at the design level, in order to provide a broader view, useful for other middleware approach developers that may share a similar problem domain.
+
+With regards to the functional requirements, the first one (\textbf{R1}) states that the users should be able to access the system from multiple devices (smartphones, laptops, tablets...). The middleware fulfils this requirement as its Java-based, and the Java VM is widely supported by those. The most used operating systems support it (Window, Mac OS, Ubuntu, Android, iOS, Windows Phone...) and even many ebooks and printers can execute the Java VM \cite{jvm-usage_and_survey}. 
+
+The second requirement (\textbf{R2}) sets that the users may join or leave the system as they please. PRIME fulfils this by preserving a set of fluid architecture \cite{fluid_architecture_reference} principles: loose coupling, flexibility, dynamism and serendipity. Due to flexibility, the number of connected users can change at runtime, without disrupting the system. Once a user is connected, the distributed DNS will add its record and will be made available for discovery and usage by the lookup service. When the user disconnects, the DNS removes the record, and the lookup service will not be able to locate it. The previously mentioned architectural fluidity concepts that PRIME is built around are exemplified in the next image (Figure 5.29).
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/fluid-architecture_pillars}
+\end{center}
+\caption{Primary concepts of architectural fluidity.}
+\label{fig:fluid-architecture_pillars}
+\end{figure}
+
+The third requirement (\textbf{R3}), states that the system users are autonomous and that the running system-instance has no prior knowledge about them. The current version of the middleware achieves this by the dynamism and serendipity of flexible architecture. PRIME Applications are autonomous and standalone, which enable the sharing of new and unforeseen resources at runtime. The sharing of those resources is driven by ontologies. The application context is semantically modelled, and as long as such ontology acknowledges flexible resource-types by generalisation, the system will fulfil the requirement. However, if the base ontology does not allow such extension when annotating resources, the system will not fulfil the requirement.
+
+In the context of \textit{Social Library}, the resources that users will share and access are mainly: book, movies and audiobooks. However, we need to highlight that those resource types are only an initial and a design-time forecast. Being an FI application, the resource types inside \textit{Social Library} are likely to change over time, as new resource types are created, old ones deprecated and resources mutate their types.
+
+We provide the taxonomy of the ontology in the image below (Figure 5.30). The full code of the ontology is provided in the annexe "Application context ontology for \textit{Social Library}", due to its length. As previously mentioned, the application context ontology is better customised for each specific use case, to achieve optimal extensibility and context knowledge representation.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/sl_app-context}
+\end{center}
+\caption{\textit{Social Library} application context ontology taxonomy.}
+\label{fig:sl_app-context}
+\end{figure}
+
+On the image above representing the ontology, we see the three different types of resources that \textit{Social Library} application motivating scenario would require. As previously mentioned, audiobooks, books and movies are only an initial consideration of resources, easily extensible by annotating unforeseen resources as the superclass Resources. Note that books and movies have extra properties, and subclasses. We have added this to clearly exemplify the extensibility (\textbf{R3}) and resource variability (\textbf{R4}) support that such design provides.
+
+The fourth functional requirement (\textbf{R4}) states that the types of resources shared through the system vary over time. As previously mentioned, in the specific case of PRIME, resources are semantically annotated using RDF. The contextualising knowledge-base (base ontology) of the application is deployed within every node. Closely related to the previous requirement, the resources will be able to vary their type when the underlying application context ontology allows it. To exemplify this, a short ontology for categorising resources is provided in the image below (Figure 5.31). Resources can be of different types and a resource that represent a tablet, over time can change its type to a smartphone, for example.
+
+% TODO - fix styling
+\newpage
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/device_ontology}
+\end{center}
+\caption{Device categorizing ontology. The full ontology is attached on the appendix "Device ontology example".}
+\label{fig:device_ontology}
+\end{figure}
+
+We have chosen the device ontology example because it may help the reader better picture the rationale between resource type-variation over time, when mapped to everyday tangible objects. In the case of \textit{Social Library}, as an example, a resource may be categorized (type) as a short film, and due to a new European Union movie sorting guideline, it may fall to the category of documentaries after a given period.
+
+The fifth requirement (\textbf{R5}) of \textit{Social Library} is that all the system users must be discoverable and reachable by other system users. This requirement is directly connected to the third pillar of a fluid architecture, dynamism. Leveraging the semantic annotation of services and service discovery mechanisms, all the system users are made available for discovery using RabbitMQ and SPARQL. The lookup service along the DNS keeps track of the available resources, and as long as proper queries are formulated and resources that satisfy such queries exist, the service discovery will match requests with resources. As we previously mentioned, in the case of the PRIME extension, all connected users (PRIME Applications) to the system are by default subscribed to the decentralised "Broadcast" RabbitMQ channel, where any member can broadcast, multicast or unicast resource matching requests (with SparQL queries), fulfilling the \textbf{R5} requirement.
+
+The sixth requirement (\textbf{R6}) states that users can define their interests towards resources. In the case of PRIME, this requisite is accomplished by using SPARQL queries, recommended to be constructed through wizards. We already explained the reasons behind this design choice, as by using queries complex interest can be constructed and using the SUB semantic pub-sub mechanism, the user specific content efficiently delivered.
+
+In order to exemplify the fulfilment of the requirement, we introduce an example below (Figure 5.32). The user Sara, defines two interests: a interest towards comic books from Stan Lee, and towards movies from Brad Pitt. 
+
+% TODO - fix styling
+\newpage
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/interest_queries}
+\end{center}
+\caption{Sara's interests over movies and comic books, as SPARQL queries.}
+\label{fig:interest_queries}
+\end{figure}
+
+The seventh functional requirement (\textbf{R7}) that \textit{Social Library} presents is the following: the system users must be aggregated into emerging communities based on shared interests. The previous version of PRIME was not able to fulfil this requirement, as the client interests were not considered at design nor modelling phase on PRIME. With the query-based interest definition and by leveraging the unique signature of each interest, users are opportunistically grouped into interest-sharing communities.
+
+With the architectural extension of PRIME, the automatic creation of interest-focused communities is supported. We will prove it by framing it on the context of the \textit{Social Library}. Lets say that the \textit{Social Library} system is started for the first time by four initial users. Each one of those users provide a type of resource and presents no set of initial interests. Each one of the users and the provided resources are detailed on the table below.
+
+\begin{center} 
+\begin{table}[ht] 
+\begin{center} 
+\begin{tabular}{ccc} 
+\hline 
+Users & Resources & Interests \\ 
+\hline 
+Ana & Audiobook & - \\ 
+Bob & Book & - \\
+Mike & Movie & - \\ 
+Sara & ShortFilm & - \\ 
+\hline 
+
+\end{tabular} 
+\end{center} 
+\caption{Listing of the provided resources- and defined interests per user at the time of the \textit{Social Library} initialization.} 
+\label{results} 
+\end{table} 
+\end{center} 
+
+Each one of the users initializes a distinct PRIME application, with the RDF-defined resources. Once the applications are initialised, the generated grouping segregation and RabbitMQ channel configuration looks like the following (Figure 5.33). Its important to mention that the resource related RabbitMQ are color coded with green.
+
+% TODO - fix styling
+\newpage
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/social-library_initial-grouping}
+\end{center}
+\caption{Grouping and RabbitMQ channels after \textit{Social Library} initialization.}
+\label{fig:social-library_initial-grouping}
+\end{figure}
+
+A vital part of FI applications is the support fun runtime changes and support emergence of interest-defined communities in the requirements of \textit{Social Library}. Continuing with the hypothetical deployment of \textit{Social Library} by the four users above, lets picture that after some time of running the system: Sara provides Movies now, Mike is no longer part of the system, both Ana and Bob have defined a interest over Movies performed by Brad Pitt and Sara has interest over books written by Jane Austen. The adaptation outcome of the grouping and RabbitMQ channels is shown in the image below (Figure 5.34).
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics*[width=1\columnwidth]{img/social-library_later-grouping}
+\end{center}
+\caption{Grouping and RabbitMQ channels after changes.}
+\label{fig:social-library_later-grouping}
+\end{figure}
+
+As we can appreciate in the image, many things occurred since the initialization. First, as the producers of resources change, Sara is now part of the "Movies" resource producers group. Once the interests are defined by the users, the SEB subscriptions are activated, for Ana, Bob and Sara. Also, from the query defined interests, the hashes are extracted, and interest-based communities created, one for each interest. Mike is also not part of the system any more. With the changes adapted by the extension over the use case, \textbf{R7} is fulfilled, along of reassuring \textbf{R2} and \textbf{R4}.
+
+The eight requirement (\textbf{R8}) states that users within the same community must opportunistically interact with each other, exchanging group-related information. This requirement is based on the concept of communities, so only achievable after the fulfilment of \textbf{R7}. Once the interest-sharing users are logically grouped by the interest-based created RabbitMQ channels, opportunistic inner community communication is achieved. All the members within one channel can broadcast, unicast and multicast the other channel members freely, fulfilling the requirement.
+
+\subsection{Result discussion}
+
+After introducing the evaluation results for the architecture extension of PRIME against the \textit{Social Library} functional requirements, the research questions need to be answered and conduct some reflective analysis over the results.
+
+Future Internet content-centric applications propose a set of features that will enable a further digital transformation of the Internet and its users. However, as we previously analysed, this is an open area of research, with many open topics, issues and ongoing development. With the help of the research questions, we have focused on answering a set of questions covering the extensibility, annotation, and discovery of services on distributed environments. To clarify the content-centric applications, methods to solve user interest definition, and autonomous interest-defined and dynamic community creation have been analysed. 
+
+Due to the broadness of the topic and available material, we scoped the contribution as a two-step process: knowledge acquisition (literature review) and knowledge application (by extending and validating the architecture of an FI middleware). The output of the literature review served as a direct input for the decisions taken under the architecture extension, and provide a comprehensive knowledge base for both researchers and developers interested in the area.
+
+With regards of how to provide an extensible semantic annotation of services, the main points to consider have been analysed, and three main approaches have been explained, namely: OWL-S (RDF), WSML and SAWSDL. Multiple alternative frameworks are present in literature, but semantic annotation of services is widely approached through the use of ontologies. Built on constructs such as triples, different frameworks build extra abstraction layers to support coordination, binding and composition. There is no clear winner, and the approach to chose will vary depending on the characteristics of the application or system to build. Often features can be traded in flavour of construct complexity (ex. RDF and SAWSDL).
+
+On how to implement semantic-aware service discovery on PEC environments,  we have focused on two main blocks: service matchmaking and service discovery architectures. Considering that this research question heavily relays on the outcome of the previous one, there is also not one universal solution. The service matchmaking mechanism to employ will considerably vary depending on how the services are semantically annotated, and the architecture to choose will also depend on the system to build. On the case of the PRIME extension, the service discovery solution chosen is based on chosen asynchronous message passing and overlay approach, RabbitMQ. Although the proposed solution fits the requirements and adjusts well with the existing development, it is important to note that other approaches are also valid.
+
+In relation with how to enable interest-focused service organisation through semantic-based groupings on PEC scenarios, we first analysed how interests are defined and represented in literature. From the existing approaches, we discovered that semantically annotated interests were predominant. However, after analysis the literature and inside the architectural extension progress, we shifted the approach towards query-representation of interests, which brought some benefits in the context of FI. That said, this is the part of the research that would require further analysis. By applying SEB pub-sub model with SPARQL, efficient content delivery is achieved, but purely opportunistic user community creation is not fully supported. This is partially tailored to the fact that result similarity is not possible to assert on SPARQL, and therefore other querying alternatives must be evaluated. Further research in the area of semantically represented user interests is required.
+
+If other approaches were to be extended rather than PRIME, probably other solution would have been proposed, probably extending a grouping-middleware, such as JGroups. RabbitMQ's provided capabilities match successfully with the resource-type ontologic namespace, but the design approach and constructs would change if another approach were to be extended or formulated.
+
+On the following section, the conclusions and future work lines will be presented, along with the main struggles and difficulties for completing the research.
+
+\pagebreak
+\section{Conclusions and Future Work}
+
+We analysed the main pain-points of content-centric Future Internet applications, conducted a literature review to better understand the issues and the open lines of research. By proposing a motivating scenario, the later defined architectural extension was validated and the results generated. We showed that the engineering of FI context-centric applications is feasible from the perspective of designing such system against real live scenarios. This grounding is crucial, so the acquired knowledge is applied into a concrete example, rather than just laid down to the thesis reader. 
+
+The results of the thesis, aligned with the defined target group in the "Introduction", are of particular relevance for researchers interested in expanding their knowledge about the content-centric Future Internet applications and to the developers of such. Aside from that, as the architectural extension is proposed over the current version of PRIME, the active developers of the middleware will considerably benefit from the proposed design guidelines. Accordingly, the impact of the findings is mostly reduced to a specific nice in research and industry areas. However, as the relevance of FI rises, the results could potentially impact a growing number inside those niches.
+
+As we stated on previous sections of the report, the achieved results can be categorised in two: knowledge acquisition and knowledge application. The knowledge acquisition outcome is the "Literature Review" section, which aimed to provide a general view of the main challenges (applicable to many FI examples) and the state of the art approaches to overcome those in literature. However, the knowledge application narrowed down to a less general architectural extension proposition. By extending PRIME and validating it against a set of requirements extracted from the motivating scenario, the application of that knowledge is accomplished, and a concrete example of design over real case presented to the user (with less applicability to other contexts). By doing so, some research gaps not identified before where spotted. The main example of this, is the lack of standardised semantic representation of interest outside concrete domains, specially if compound interests are to be formulated. Selecting a query representation of those interests partially covers the gap, but it also hardens the interest-based community creation, as query-result similarity assessment is not always possible.
+
+With regards to the main challenges faced by the project and how we overcame them, we can highlight: 
+
+\begin{itemize}
+\item The broadness of the topic. Main and biggest challenge to overcome, due to the vast amount of information available about the topics conforming FI that needs to be understood. It was solved with the help of the supervisor and by reading multiple highlighted resources for understanding the evolution towards FI and nature of the challenges to face.
+\item The lack of high-level architectural view about the important architectural layers of building FI applications. Many resources exist on the area of distributed computing, autonomous and semi-adaptive systems, but a reference guide for engineering FI applications was missing. That is the knowledge gap that the report aims to solve, by also providing a design over a motivating scenario.
+\item The lack of standards in those architectural layers. Many frameworks exist that support part of the stack or solve a specific problem. However, the industry and committees have not reached an agreement on how to approach the development of FI apps, with regards to the specific technological approach. Each vendor and researcher group has their view of the challenges and how to overcome them. The PRIME middleware was chosen to provide a common ground when designing the architectural extension.
+\item The number of resources per every topic that required coverage for the understanding and presenting a basic knowledge layer about FI. Many challenges are under active research (ex. how to provide security in IoT), and the amount of literature becomes infeasible to cover by a single researcher over the length of the thesis period with the desired depth. We chose the main set of papers per each topic and conducted the literature review.
+\item The impossibility of assert the semantic query similarity. This proposed a challenge late in the research process, not expected from the literature review, as it was spotted when lowering the abstract level. Interest definition and reasoning is also a broad topic, that due to the resource constraints we were only able to analyse at a high level.
+\end{itemize}
+
+Such listing brings us to the set of actions for increasing the results of any similar research to be:
+
+\begin{itemize}
+\item Narrow down the scope of the research much more. When tackling broad topics it is easy to lost track of the core and most relevant issues, lowering the impact of the research outcomes.
+\item Conduct a systematic literature review if possible, once the scope has been narrowed down to a manageable level. The foundations for conducting such have already been set by the method followed by the literature review, even if the total amount of papers provided by the sources could not be analysed due to the extent of them.
+\item Even if the research is to be kept at design level, try to assert the formulations against a concrete motivating scenario. It can allow to spot issues not identified during the literature review and improve the granularity of the research outcomes.
+\item As a consequence of narrowing down the scope, contribute to a lower level of the content-centric FI application abstraction. Developed code tend to be simpler to analyse quantitatively, and relevant outcomes may be generated when comparing different approaches (ex. over performance).
+\end{itemize}
+
+\paragraph{Future Work}
+As future work, we would propose to extend the reach of the research to the development level of PRIME. To do so, the ongoing developments by other researchers must be merged to a satisfactory level, from which to build on. With regards to the interest-definition, further research in the area of interest definition and interest-grouping would be required, specially to improve the current approach to interest-based user community creation. Lastly, even if the current architectural extension supports all the requirements presented by \textit{Social Library}, we would like to further investigate the available options for allowing dynamic runtime extension of the application context ontologies.
+
+\newpage
+
+%----------------------------------------------------------------------------------------
+%	References. IEEE style is used.
+%
+%----------------------------------------------------------------------------------------
+\newpage
+
+%-------
+%	TODO:
+%   -> Add automate figure referencing. "\ref{fig:XXX}"
+%   -> Validate and complete architecture
+%-------
+
+
+\hypersetup{urlcolor=black} 
+\bibliographystyle{IEEEtran}
+\bibliography{referenser}
+\newpage
+%----------------------------------------------------------------------------------------
+%	Appendix
+%-----------------------------------------------------------------------------------------
+\pagenumbering{Alph}
+\setcounter{page}{1} % Reset page numbering for Appendix
+\appendix
+
+% TODO - improve ordering and clean apendixes
+
+\section{Appendix 1 - Ontologies} 
+In the appendix you can put details that does not fit into the main report. Examples are source code, long tables with raw data and questionnaires.
+
+\subsection{Semantic Annotation of Services}
+
+\subsubsection{OWL-S Example}
+
+OWL-S ontology example, featuring a ontology for books. Each book has a title, authorList, isbn, publisher and other details. As seen below, the authorList ontology property can contain multiple authors.
+
+\lstset{
+    language=xml,
+    tabsize=3,
+    %frame=lines,
+    caption=OWL-S example book ontology,
+    label=code:sample,
+    frame=shadowbox,
+    rulesepcolor=\color{gray},
+    xleftmargin=20pt,
+    framexleftmargin=15pt,
+    keywordstyle=\color{blue}\bf,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    breaklines=true,
+    showstringspaces=false,
+    basicstyle=\footnotesize,
+    emph={food,name,price},emphstyle={\color{magenta}}}
+    \lstinputlisting{code/text.xml}
+
+
+\subsubsection{WSDL Example}
+
+WSDL examples from the W3C documentation. Featuring: ontology (family ontology), service annotation (birth date registration), goal definition (citizenship goal) and service mediator.
+
+\lstset{
+    language=xml,
+    tabsize=3,
+    %frame=lines,
+    caption=WSML family ontology,
+    label=code:sample,
+    frame=shadowbox,
+    rulesepcolor=\color{gray},
+    xleftmargin=20pt,
+    framexleftmargin=15pt,
+    keywordstyle=\color{blue}\bf,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    breaklines=true,
+    showstringspaces=false,
+    basicstyle=\footnotesize,
+    emph={food,name,price},emphstyle={\color{magenta}}}
+    \lstinputlisting{code/wsml/ontology.xml}
+    
+    \lstset{
+    language=xml,
+    tabsize=3,
+    %frame=lines,
+    caption=WSML birth date registration service,
+    label=code:sample,
+    frame=shadowbox,
+    rulesepcolor=\color{gray},
+    xleftmargin=20pt,
+    framexleftmargin=15pt,
+    keywordstyle=\color{blue}\bf,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    breaklines=true,
+    showstringspaces=false,
+    basicstyle=\footnotesize,
+    emph={food,name,price},emphstyle={\color{magenta}}}
+    \lstinputlisting{code/wsml/webService.xml}
+    
+    \lstset{
+    language=xml,
+    tabsize=3,
+    %frame=lines,
+    caption=WSML get citizenship goal,
+    label=code:sample,
+    frame=shadowbox,
+    rulesepcolor=\color{gray},
+    xleftmargin=20pt,
+    framexleftmargin=15pt,
+    keywordstyle=\color{blue}\bf,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    breaklines=true,
+    showstringspaces=false,
+    basicstyle=\footnotesize,
+    emph={food,name,price},emphstyle={\color{magenta}}}
+    \lstinputlisting{code/wsml/goal.xml}
+    
+    \lstset{
+    language=xml,
+    tabsize=3,
+    %frame=lines,
+    caption=WSML mediator,
+    label=code:sample,
+    frame=shadowbox,
+    rulesepcolor=\color{gray},
+    xleftmargin=20pt,
+    framexleftmargin=15pt,
+    keywordstyle=\color{blue}\bf,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    breaklines=true,
+    showstringspaces=false,
+    basicstyle=\footnotesize,
+    emph={food,name,price},emphstyle={\color{magenta}}}
+    \lstinputlisting{code/wsml/mediator.xml}
+    
+\subsection{Device ontology example}
+
+Ontology for categorization of devices.
+
+\lstset{
+    language=xml,
+    tabsize=3,
+    %frame=lines,
+    caption=Device categorization OWL ontology,
+    label=code:sample,
+    frame=shadowbox,
+    rulesepcolor=\color{gray},
+    xleftmargin=20pt,
+    framexleftmargin=15pt,
+    keywordstyle=\color{blue}\bf,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    breaklines=true,
+    showstringspaces=false,
+    basicstyle=\footnotesize,
+    emph={food,name,price},emphstyle={\color{magenta}}}
+    \lstinputlisting{code/ontologies/devices_cleaned.owl}
+    
+    
+\pagenumbering{Alph}
+\setcounter{page}{1} % Reset page numbering for Appendix
+\appendix    
+\section{Appendix 2 - Motivating scenario's context ontology} 
+
+\subsection{Application context ontology for \textit{Social Library}}
+
+The following ontology encodes the application context ontology for \textit{Social Library}. We could have extended it greatly, but that has been avoided for the sake of understandability.
+
+\lstset{
+    language=xml,
+    tabsize=3,
+    caption=\textit{Social Library} application context ontology,
+    label=code:sample,
+    frame=shadowbox,
+    rulesepcolor=\color{gray},
+    xleftmargin=20pt,
+    framexleftmargin=15pt,
+    keywordstyle=\color{blue}\bf,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    breaklines=true,
+    showstringspaces=false,
+    basicstyle=\footnotesize,
+    emph={food,name,price},emphstyle={\color{magenta}}}
+    \lstinputlisting{code/ontologies/social-library_application-context.owl}
+
+\end{document}

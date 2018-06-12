@@ -1,0 +1,1252 @@
+% Autonomic Computing
+@article{visionOfAutonomicComputing,
+  title={The vision of autonomic computing},
+  author={Kephart, Jeffrey O and Chess, David M},
+  journal={Computer},
+  volume={36},
+  number={1},
+  pages={41--50},
+  year={2003},
+  publisher={IEEE}
+}
+
+% Cloud Computing
+@techreport{cc_berkeley-view,
+  title={Above the clouds: A berkeley view of cloud computing},
+  author={Armbrust, Michael and Fox, Armando and Griffith, Rean and Joseph, Anthony D and Katz, Randy H and Konwinski, Andrew and Lee, Gunho and Patterson, David A and Rabkin, Ariel and Stoica, Ion and others},
+  year={2009},
+  institution={Technical Report UCB/EECS-2009-28, EECS Department, University of California, Berkeley}
+}
+@article{cc_classification,
+  title={Cloud computing--a classification, business models, and research directions},
+  author={Weinhardt, Christof and Anandasivam, Arun and Blau, Benjamin and Borissov, Nikolay and Meinl, Thomas and Michalk, Wibke and St{\"o}{\ss}er, Jochen},
+  journal={Business \& Information Systems Engineering},
+  volume={1},
+  number={5},
+  pages={391--399},
+  year={2009},
+  publisher={Springer}
+}
+@article{cc_nist-definition,
+  title={The NIST definition of cloud computing},
+  author={Mell, Peter and Grance, Tim and others},
+  year={2011},
+  publisher={Computer Security Division, Information Technology Laboratory, National Institute of Standards and Technology Gaithersburg}
+}
+@article{aws_reference,
+  title={Amazon web services},
+  author={Cloud, Amazon Elastic Compute},
+  journal={Retrieved November},
+  volume={9},
+  pages={2011},
+  year={2011}
+}
+@incollection{googleComputeEngine,
+  title={Google compute engine},
+  author={Krishnan, SPT and Gonzalez, Jose L Ugia},
+  booktitle={Building Your Next Big Thing with Google Cloud Platform},
+  pages={53--81},
+  year={2015},
+  publisher={Springer}
+}
+@article{SaaS,
+  title={Opportunities and risks of software-as-a-service: Findings from a survey of IT executives},
+  author={Benlian, Alexander and Hess, Thomas},
+  journal={Decision Support Systems},
+  volume={52},
+  number={1},
+  pages={232--246},
+  year={2011},
+  publisher={Elsevier}
+}
+@online{Azure_IaaS,
+	title = {Introduction to Azure {IaaS}},
+	url = {https://support.microsoft.com/en-ie/help/3197555/introduction-to-azure-iaas},
+	urldate = {2018-04-07},
+	file = {Introduction to Azure IaaS:C\:\\Users\\alain\\Zotero\\storage\\TQHPH7EP\\introduction-to-azure-iaas.html:text/html}
+}
+@article{softwareIntoService,
+  title={Turning software into a service},
+  author={Turner, Mark and Budgen, David and Brereton, Pearl},
+  journal={Computer},
+  volume={36},
+  number={10},
+  pages={38--44},
+  year={2003},
+  publisher={IEEE}
+}
+@online{salesforce,
+	title = {{CRM} Software \& Cloud Computing Solutions - Salesforce {EMEA}},
+	url = {https://www.salesforce.com/eu/},
+	urldate = {2018-04-07},
+	file = {CRM Software & Cloud Computing Solutions - Salesforce EMEA:C\:\\Users\\alain\\Zotero\\storage\\GBJLNGR5\\eu.html:text/html}
+}
+@online{office365,
+	title = {Compare business subscription plans for Office 365},
+	url = {https://products.office.com/en-IE/business/get-office-365-for-your-business-with-latest-2016-apps?&wt.srch=1&wt.mc_id=AID623571_SEM_GvMDZFAI&lnkd=Google_O365SMB_Brand},
+	urldate = {2018-04-07},
+	langid = {english},
+	file = {Snapshot:C\:\\Users\\alain\\Zotero\\storage\\V7PY75T2\\get-office-365-for-your-business-with-latest-2016-apps.html:text/html}
+}
+@online{googleApps,
+	title = {G Suite – Gmail, Docs, Drive, Calendar and More for Business},
+	url = {gsuite.google.ie/intl/en_ie/},
+	abstract = {Do your best work with Google’s suite of intelligent apps. Get business email, video conferencing, online storage and file sharing. Try it free.},
+	urldate = {2018-04-07},
+	langid = {english},
+	file = {Snapshot:C\:\\Users\\alain\\Zotero\\storage\\CXHVTNQF\\en_ie.html:text/html}
+}
+@article{cc_baas,
+  title={Cloud computing: types, architecture, applications, concerns, virtualization and role of it governance in cloud},
+  author={Sareen, Pankaj},
+  journal={International Journal of Advanced Research in Computer Science and Software Engineering},
+  volume={3},
+  number={3},
+  year={2013}
+}
+@online{firebase,
+	title = {Firebase},
+	url = {https://firebase.google.com/},
+	abstract = {Firebase is Google’s mobile platform that helps you quickly develop high-quality apps and grow your business.},
+	titleaddon = {Firebase},
+	urldate = {2018-04-07},
+	langid = {english},
+	file = {Snapshot:C\:\\Users\\alain\\Zotero\\storage\\97KY683V\\firebase.google.com.html:text/html}
+}
+@online{meteor,
+	title = {Build Apps with Meteor},
+	url = {https://www.meteor.com/},
+	abstract = {Meteor is a complete platform for building web and mobile apps in pure {JavaScript}.},
+	author = {Group, Meteor Development},
+	urldate = {2018-04-07}
+}
+@online{kumulos,
+	title = {Kumulos Mobile Backend as a Service},
+	url = {https://www.kumulos.com/features/mbaas/},
+	abstract = {Kumulos {mBaaS} is the easy and hassle free way to take care of the server side of the app. We manage data \& file storage, {API} Management and more.},
+	titleaddon = {Kumulos},
+	urldate = {2018-04-07},
+	langid = {american}
+}
+@article{serverless_openLambda,
+  title={Serverless computation with openlambda},
+  author={Hendrickson, Scott and Sturdevant, Stephen and Harter, Tyler and Venkataramani, Venkateshwaran and Arpaci-Dusseau, Andrea C and Arpaci-Dusseau, Remzi H},
+  journal={Elastic},
+  volume={60},
+  pages={80},
+  year={2016}
+}
+@online{aws_lambda,
+	title = {{AWS} Lambda – Serverless Compute - Amazon Web Services},
+	url = {https://aws.amazon.com/lambda/},
+	abstract = {{AWS} Lambda lets you run code without provisioning or managing servers. You pay only for the compute time you consume.},
+	titleaddon = {Amazon Web Services, Inc.},
+	urldate = {2018-04-07},
+	langid = {american},
+	file = {Snapshot:C\:\\Users\\alain\\Zotero\\storage\\K7P7GT4Q\\lambda.html:text/html}
+}
+@online{googleCloud_functions,
+	title = {Cloud Functions - Event-driven Serverless Computing},
+	url = {https://cloud.google.com/functions/},
+	abstract = {Google Cloud Functions makes it easy for developers to run and scale code in the cloud and build event-driven serverless applications.},
+	titleaddon = {Google Cloud},
+	urldate = {2018-04-07},
+	langid = {english},
+	file = {Snapshot:C\:\\Users\\alain\\Zotero\\storage\\2TLSZU7A\\functions.html:text/html}
+}
+@online{azure_functions,
+	title = {Azure Functions—Serverless Architecture {\textbar} Microsoft Azure},
+	url = {https://azure.microsoft.com/en-us/services/functions/},
+	abstract = {Speed development and focus on building great apps. Azure Functions is an event-driven serverless compute experience that works on a pay-as-you-go model, with scale on demand.},
+	urldate = {2018-04-07},
+	langid = {english},
+	file = {Snapshot:C\:\\Users\\alain\\Zotero\\storage\\H5VDFJSI\\functions.html:text/html}
+}
+@inproceedings{cc_concepts-architecture-challenges,
+  title={Cloud computing-concepts, architecture and challenges},
+  author={Jadeja, Yashpalsinh and Modi, Kirit},
+  booktitle={Computing, Electronics and Electrical Technologies (ICCEET), 2012 International Conference on},
+  pages={877--880},
+  year={2012},
+  organization={IEEE}
+}
+% Fog computing
+@inproceedings{fogComputing-IoT,
+  title={Fog computing and its role in the internet of things},
+  author={Bonomi, Flavio and Milito, Rodolfo and Zhu, Jiang and Addepalli, Sateesh},
+  booktitle={Proceedings of the first edition of the MCC workshop on Mobile cloud computing},
+  pages={13--16},
+  year={2012},
+  organization={ACM}
+}
+@inproceedings{fogComputing-platform,
+  title={Fog computing: Platform and applications},
+  author={Yi, Shanhe and Hao, Zijiang and Qin, Zhengrui and Li, Qun},
+  booktitle={Hot Topics in Web Systems and Technologies (HotWeb), 2015 Third IEEE Workshop on},
+  pages={73--78},
+  year={2015},
+  organization={IEEE}
+}
+@inproceedings{fogComputing-security,
+  title={The fog computing paradigm: Scenarios and security issues},
+  author={Stojmenovic, Ivan and Wen, Sheng},
+  booktitle={Computer Science and Information Systems (FedCSIS), 2014 Federated Conference on},
+  pages={1--8},
+  year={2014},
+  organization={IEEE}
+}
+
+% Edge computing
+
+% FI - Future Internet
+@inproceedings{futureInternet_IoT,
+  title={Future internet: The internet of things},
+  author={Tan, Lu and Wang, Neng},
+  booktitle={Advanced Computer Theory and Engineering (ICACTE), 2010 3rd International Conference on},
+  volume={5},
+  pages={V5--376},
+  year={2010},
+  organization={IEEE}
+}
+@article{futureInternet_designIssues,
+  title={Fundamental design issues for the future Internet},
+  author={Shenker, Scott},
+  journal={IEEE Journal on selected areas in communications},
+  volume={13},
+  number={7},
+  pages={1176--1188},
+  year={1995},
+  publisher={IEEE}
+}
+@article{futureInternet_cross-ETP-vision,
+  title={Future Internet--the cross-ETP vision document},
+  author={Papadimitriou, Dimitri and others},
+  journal={European Technology Platform, Alcatel Lucent},
+  volume={8},
+  pages={3},
+  year={2009}
+}
+
+% Service Discovery
+@article{upnp_reference,
+  title={Home networking with universal plug and play},
+  author={Miller, Brent A and Nixon, Toby and Tai, Charlie and Wood, Mark D},
+  journal={IEEE Communications Magazine},
+  volume={39},
+  number={12},
+  pages={104--109},
+  year={2001},
+  publisher={IEEE}
+}
+
+% Grouping approaches
+@inproceedings{A3_reference,
+  title={A-3: An architectural style for coordinating distributed components},
+  author={Baresi, Luciano and Guinea, Sam},
+  booktitle={Software Architecture (WICSA), 2011 9th Working IEEE/IFIP Conference on},
+  pages={161--170},
+  year={2011},
+  organization={IEEE}
+}
+
+@incollection{A3-tag_reference,
+  title={Achieving self-adaptation through dynamic group management},
+  author={Baresi, Luciano and Guinea, Sam and Saeedi, Panteha},
+  booktitle={Assurances for Self-Adaptive Systems},
+  pages={214--239},
+  year={2013},
+  publisher={Springer}
+}
+
+@inproceedings{interest-tag_music,
+  title={Connecting Users with Similar Interests across Multiple Web Services.},
+  author={Kwak, Haewoon and Shin, Hwa-Yong and Yoon, Jong-Il and Moon, Sue B},
+  booktitle={ICWSM},
+  year={2009}
+}
+
+% Industry 4.0
+@article{Industry4_0,
+  title={How virtualization, decentralization and network building change the manufacturing landscape: An Industry 4.0 Perspective},
+  author={Brettel, Malte and Friederichsen, Niklas and Keller, Michael and Rosenberg, Marius},
+  journal={International Journal of Mechanical, Industrial Science and Engineering},
+  volume={8},
+  number={1},
+  pages={37--44},
+  year={2014}
+}
+
+% IoT - Internet of Things
+@article{IoT_review,
+  title={Internet of Things (IoT): A vision, architectural elements, and future directions},
+  author={Gubbi, Jayavardhana and Buyya, Rajkumar and Marusic, Slaven and Palaniswami, Marimuthu},
+  journal={Future generation computer systems},
+  volume={29},
+  number={7},
+  pages={1645--1660},
+  year={2013},
+  publisher={Elsevier}
+}
+@article{IoT_healthcare,
+  title={The internet of things in healthcare: Potential applications and challenges},
+  author={Laplante, Phillip A and Laplante, Nancy},
+  journal={IT Professional},
+  volume={18},
+  number={3},
+  pages={2--4},
+  year={2016},
+  publisher={IEEE}
+}
+@inproceedings{IoT_architecture-European-perspective,
+  title={Designing IoT architecture (s): A European perspective},
+  author={Krco, Srdjan and Pokric, Boris and Carrez, Francois},
+  booktitle={Internet of Things (WF-IoT), 2014 IEEE World Forum on},
+  pages={79--84},
+  year={2014},
+  organization={IEEE}
+}
+@article{IoT_reference-architectures,
+  title={Reference architectures for the internet of things},
+  author={Weyrich, Michael and Ebert, Christof},
+  journal={IEEE Software},
+  volume={33},
+  number={1},
+  pages={112--116},
+  year={2016},
+  publisher={IEEE}
+}
+
+% Semantic web, web 3.0
+@article{web30_review,
+  title={Embracing" Web 3.0"},
+  author={Lassila, Ora and Hendler, James},
+  journal={IEEE Internet Computing},
+  volume={11},
+  number={3},
+  year={2007},
+  publisher={IEEE}
+}
+@online{w3c,
+	title = {World Wide Web Consortium (W3C)},
+	url = {https://www.w3.org/},
+	urldate = {2018-04-04},
+	file = {World Wide Web Consortium (W3C):C\:\\Users\\alain\\Zotero\\storage\\P9XSTFBW\\www.w3.org.html:text/html}
+}
+@incollection{internetTrafficGrowth,
+  title={Internet growth: Is there a “Moore’s Law” for data traffic?},
+  author={Coffman, Kerry G and Odlyzko, Andrew M},
+  booktitle={Handbook of massive data sets},
+  pages={47--93},
+  year={2002},
+  publisher={Springer}
+}
+@article{xml_reference,
+  title={Extensible markup language (XML).},
+  author={Bray, Tim and Paoli, Jean and Sperberg-McQueen, C Michael and Maler, Eve and Yergeau, Fran{\c{c}}ois},
+  journal={World Wide Web Journal},
+  volume={2},
+  number={4},
+  pages={27--66},
+  year={1997}
+}
+@article{SWS_semanticWebServices,
+  title={Semantic web services},
+  author={McIlraith, Sheila A and Son, Tran Cao and Zeng, Honglei},
+  journal={IEEE intelligent systems},
+  volume={16},
+  number={2},
+  pages={46--53},
+  year={2001},
+  publisher={IEEE}
+}
+@inproceedings{SWS_grounding,
+  title={Semantic web services grounding},
+  author={Kopecky, Jacek and Roman, Dumitru and Moran, Matthew and Fensel, Dieter},
+  booktitle={Telecommunications, 2006. AICT-ICIW'06. International Conference on Internet and Web Applications and Services/Advanced International Conference on},
+  pages={127--127},
+  year={2006},
+  organization={IEEE}
+}
+@article{daml+oil_reference,
+  title={DAML+ OIL: an ontology language for the Semantic Web},
+  author={McGuinness, Deborah L and Fikes, Richard and Hendler, James and Stein, Lynn Andrea},
+  journal={IEEE Intelligent Systems},
+  volume={17},
+  number={5},
+  pages={72--80},
+  year={2002},
+  publisher={IEEE}
+}
+@inproceedings{damls_reference,
+  title={DAML-S: Web service description for the semantic web},
+  author={Ankolekar, Anupriya and Burstein, Mark and Hobbs, Jerry R and Lassila, Ora and Martin, David and McDermott, Drew and McIlraith, Sheila A and Narayanan, Srini and Paolucci, Massimo and Payne, Terry and others},
+  booktitle={International Semantic Web Conference},
+  pages={348--363},
+  year={2002},
+  organization={Springer}
+}
+@article{rdf_reference,
+  title={Resource description framework (RDF): Concepts and abstract syntax},
+  author={Klyne, Graham and Carroll, Jeremy J},
+  year={2006}
+}
+@inproceedings{rdfs_reference,
+  title={Sesame: A generic architecture for storing and querying rdf and rdf schema},
+  author={Broekstra, Jeen and Kampman, Arjohn and Van Harmelen, Frank},
+  booktitle={International semantic web conference},
+  pages={54--68},
+  year={2002},
+  organization={Springer}
+}
+@incollection{owl_reference,
+  title={OWL: Web ontology language},
+  author={Bechhofer, Sean},
+  booktitle={Encyclopedia of database systems},
+  pages={2008--2009},
+  year={2009},
+  publisher={Springer}
+}
+@inproceedings{owls_reference,
+  title={Bringing semantics to web services: The OWL-S approach},
+  author={Martin, David and Paolucci, Massimo and McIlraith, Sheila and Burstein, Mark and McDermott, Drew and McGuinness, Deborah and Parsia, Bijan and Payne, Terry and Sabou, Marta and Solanki, Monika and others},
+  booktitle={International Workshop on Semantic Web Services and Web Process Composition},
+  pages={26--42},
+  year={2004},
+  organization={Springer}
+}
+@inproceedings{owls_ide,
+  title={Semantic web service discovery in the OWL-S IDE},
+  author={Srinivasan, Naveen and Paolucci, Massimo and Sycara, Katia},
+  booktitle={System Sciences, 2006. HICSS'06. Proceedings of the 39th Annual Hawaii International Conference on},
+  volume={6},
+  pages={109b--109b},
+  year={2006},
+  organization={IEEE}
+}
+@article{owls_mx,
+  title={OWLS-MX: A hybrid Semantic Web service matchmaker for OWL-S services},
+  author={Klusch, Matthias and Fries, Benedikt and Sycara, Katia},
+  journal={Web Semantics: Science, Services and Agents on the World Wide Web},
+  volume={7},
+  number={2},
+  pages={121--133},
+  year={2009},
+  publisher={Elsevier}
+}
+@inproceedings{owls_xplan,
+  title={Semantic web service composition planning with owls-xplan},
+  author={Klusch, Matthias and Gerber, Andreas and Schmidt, Marcus},
+  booktitle={Proceedings of the 1st Int. AAAI Fall Symposium on Agents and the Semantic Web},
+  pages={55--62},
+  year={2005}
+}
+@misc{wsdl_reference,
+  title={Web services description language (WSDL) 1.1},
+  author={Christensen, Erik and Curbera, Francisco and Meredith, Greg and Weerawarana, Sanjiva and others},
+  year={2001},
+  publisher={Citeseer}
+}
+@inproceedings{wsml_reference,
+  title={The web service modeling language WSML: an overview},
+  author={De Bruijn, Jos and Lausen, Holger and Polleres, Axel and Fensel, Dieter},
+  booktitle={European Semantic Web Conference},
+  pages={590--604},
+  year={2006},
+  organization={Springer}
+}
+@misc{wsmo_reference,
+  title={Web service modeling ontology (WSMO)-An ontology for semantic web services},
+  author={Domingue, John and Roman, Dumitru and Stollberg, Michael},
+  year={2005},
+  publisher={Jun}
+}
+@article{wsmf_reference,
+  title={The web service modeling framework WSMF},
+  author={Fensel, Dieter and Bussler, Christoph},
+  journal={Electronic Commerce Research and Applications},
+  volume={1},
+  number={2},
+  pages={113--137},
+  year={2002},
+  publisher={Elsevier}
+}
+@article{swws_reference,
+  title={A conceptual architecture for semantic web enabled web services},
+  author={Bussler, Christoph and Fensel, Dieter and Maedche, Alexander},
+  journal={ACM Sigmod Record},
+  volume={31},
+  number={4},
+  pages={24--29},
+  year={2002},
+  publisher={ACM}
+}
+
+@inproceedings{service_vs_web-service,
+  title={A shared service terminology for online service provisioning},
+  author={Baida, Ziv and Gordijn, Jaap and Omelayenko, Borys},
+  booktitle={Proceedings of the 6th international conference on Electronic commerce},
+  pages={1--10},
+  year={2004},
+  organization={ACM}
+}
+@article{sawsdl_reference,
+  title={Sawsdl: Semantic annotations for wsdl and xml schema},
+  author={Kopeck{\`y}, Jacek and Vitvar, Tomas and Bournez, Carine and Farrell, Joel},
+  journal={IEEE Internet Computing},
+  volume={11},
+  number={6},
+  year={2007},
+  publisher={IEEE}
+}
+@article{sawsdl_why,
+  title={Semantically annotating a web service},
+  author={Verma, Kunal and Sheth, Amit},
+  journal={IEEE Internet Computing},
+  volume={11},
+  number={2},
+  year={2007},
+  publisher={IEEE}
+}
+@article{sawsdl4j_reference,
+  title={Dynamic and Agile SOA using SAWSDL},
+  author={Gomadam, Karthik and Verma, Kunal and Sheth, Amit P},
+  year={2008}
+}
+@online{sawsdl_online,
+	title = {Semantic Annotations for {WSDL} and {XML} Schema — Usage Guide},
+	url = {https://www.w3.org/2002/ws/sawsdl/spec/examples/#examples}
+}
+@article{meteor-s_wsdi,
+  title={Meteor-s wsdi: A scalable p2p infrastructure of registries for semantic publication and discovery of web services},
+  author={Verma, Kunal and Sivashanmugam, Kaarthik and Sheth, Amit and Patil, Abhijit and Oundhakar, Swapna and Miller, John},
+  journal={Information Technology and Management},
+  volume={6},
+  number={1},
+  pages={17--39},
+  year={2005},
+  publisher={Springer}
+}
+@article{uddi_reference,
+  title={Universal Description, Discovery and Integration},
+  author={van Steenderen, Margaret},
+  journal={SA Journal of Information Management},
+  volume={2},
+  number={4},
+  year={2000}
+}
+@article{jxta_reference,
+  title={JXTA: A network programming environment},
+  author={Gong, Li},
+  journal={IEEE Internet Computing},
+  volume={5},
+  number={3},
+  pages={88--95},
+  year={2001},
+  publisher={IEEE}
+}
+
+%
+@book{CASCOM,
+  title={CASCOM: intelligent service coordination in the semantic web},
+  author={Schumacher, Michael and Helin, Heikki and Schuldt, Heiko},
+  year={2008},
+  publisher={Springer Science \& Business Media}
+}
+@article{semantic_matchmaking-and-discovery,
+  title={Flexible semantic-based service matchmaking and discovery},
+  author={Bianchini, Devis and De Antonellis, Valeria and Melchiori, Michele},
+  journal={World Wide Web},
+  volume={11},
+  number={2},
+  pages={227--251},
+  year={2008},
+  publisher={Springer}
+}
+@inproceedings{semantic_service-discovery,
+  title={Content based service discovery in semantic web services using wordnet},
+  author={Paulraj, D and Swamynathan, S},
+  booktitle={International Conference on Advanced Computing, Networking and Security},
+  pages={48--56},
+  year={2011},
+  organization={Springer}
+}
+@article{semantic_service-discovery_inHealthcare,
+  title={Hybrid approach for context-aware service discovery in healthcare domain},
+  author={Fenza, Giuseppe and Furno, Domenico and Loia, Vincenzo},
+  journal={Journal of Computer and System Sciences},
+  volume={78},
+  number={4},
+  pages={1232--1247},
+  year={2012},
+  publisher={Elsevier}
+}
+@inproceedings{semantic_reference,
+  title={Semantic based service discovery},
+  author={Petculescu, Alexandru},
+  booktitle={Intelligent Computer Communication and Processing (ICCP), 2013 IEEE International Conference on},
+  pages={325--329},
+  year={2013},
+  organization={IEEE}
+}
+% Service annotation
+@inproceedings{automaticTextExtractionFromVideo,
+  title={Automatic text extraction from video for content-based annotation and retrieval},
+  author={Shim, Jae-Chang and Dorai, Chitra and Bolle, Ruud},
+  booktitle={Pattern Recognition, 1998. Proceedings. Fourteenth International Conference on},
+  volume={1},
+  pages={618--620},
+  year={1998},
+  organization={IEEE}
+}
+@article{webTextContextAnnotation,
+  title={Content annotation for the semantic web: an automatic web-based approach},
+  author={S{\'a}nchez, David and Isern, David and Millan, Miquel},
+  journal={Knowledge and Information Systems},
+  volume={27},
+  number={3},
+  pages={393--418},
+  year={2011},
+  publisher={Springer}
+}
+
+
+@article{biomedicalResourceAnnotation,
+  title={Developing an application ontology for biomedical resource annotation and retrieval: challenges and lessons learned.},
+  author={Torniai, Carlo and Brush, Matthew H and Vasilevsky, Nicole and Segerdell, Erik and Wilson, Melanie and Johnson, Tenille and Corday, Karen and Shaffer, Chris and Haendel, Melissa},
+  journal={ICBO},
+  volume={2011},
+  pages={101--108},
+  year={2011}
+}
+
+% Big data
+@article{bigData_growth,
+  title={The digital universe in 2020: Big data, bigger digital shadows, and biggest growth in the far east},
+  author={Gantz, John and Reinsel, David},
+  journal={IDC iView: IDC Analyze the future},
+  volume={2007},
+  number={2012},
+  pages={1--16},
+  year={2012}
+}
+@article{p2p_reference,
+  title={Peer-to-peer networks},
+  author={Fox, Geoffrey},
+  journal={Computing in Science \& Engineering},
+  volume={3},
+  number={3},
+  pages={75--77},
+  year={2001},
+  publisher={IEEE}
+}
+@article{napster_reference,
+  title={When creators, corporations and consumers collide: Napster and the development of on-line music distribution},
+  author={McCourt, Tom and Burkart, Patrick},
+  journal={Media, Culture \& Society},
+  volume={25},
+  number={3},
+  pages={333--350},
+  year={2003},
+  publisher={Sage Publications}
+}
+@online{ricochet_reference,
+	title={ricochet: Anonymous peer-to-peer instant messaging},
+	url={https://github.com/ricochet-im/ricochet},
+	shorttitle = {ricochet},
+	urldate = {2018-04-22},
+	date = {2018-04-21}
+}
+@online{tor_reference,
+	title = {Tor Project {\textbar} Privacy Online},
+	url = {https://www.torproject.org/},
+	abstract = {The Tor Project's free software protects your privacy online.},
+	author = {Inc, The Tor Project},
+	urldate = {2018-04-22}
+}
+@online{circle_reference,
+	title = {Circle {\textbar} On a mission to create a more inclusive global economy.},
+	url = {https://www.circle.com/en},
+	abstract = {Tapping into unthought of ways to move, share, invest and trade money.},
+	urldate = {2018-04-22},
+	langid = {english}
+}
+@online{blockchain_reference,
+	title = {Blockchain},
+	url = {https://www.blockchain.com/},
+	urldate = {2018-04-22}
+}
+%overlay networks
+@article{p2p-overlay_survey,
+  title={A survey and comparison of peer-to-peer overlay network schemes},
+  author={Lua, Eng Keong and Crowcroft, Jon and Pias, Marcelo and Sharma, Ravi and Lim, Steven},
+  journal={IEEE Communications Surveys \& Tutorials},
+  volume={7},
+  number={2},
+  pages={72--93},
+  year={2005},
+  publisher={IEEE}
+}
+@article{chord_reference,
+  title={Chord: a scalable peer-to-peer lookup protocol for internet applications},
+  author={Stoica, Ion and Morris, Robert and Liben-Nowell, David and Karger, David R and Kaashoek, M Frans and Dabek, Frank and Balakrishnan, Hari},
+  journal={IEEE/ACM Transactions on Networking (TON)},
+  volume={11},
+  number={1},
+  pages={17--32},
+  year={2003},
+  publisher={IEEE Press}
+}
+@online{gnutella_reference,
+	title = {Gnutella},
+	rights = {Creative Commons Attribution-{ShareAlike} License},
+	url = {https://en.wikipedia.org/w/index.php?title=Gnutella&oldid=837420609},
+	abstract = {Gnutella (possibly by analogy with the {GNU} Project) is a large peer-to-peer network. It was the first decentralized peer-to-peer network of its kind, leading to other, later networks adopting the model. It celebrated a decade of existence on March 14, 2010, and has a user base in the millions for peer-to-peer file sharing.
+In June 2005, Gnutella's population was 1.81 million computers increasing to over three million nodes by January 2006. In late 2007, it was the most popular file-sharing network on the Internet with an estimated market share of more than 40\%.},
+	booktitle = {Wikipedia},
+	urldate = {2018-04-23},
+	date = {2018-04-20},
+	langid = {english},
+	note = {Page Version {ID}: 837420609}
+}
+
+% XaaS
+@article{service-computing-manifesto,
+  title={A service computing manifesto: the next 10 years},
+  author={Bouguettaya, Athman and Singh, Munindar and Huhns, Michael and Sheng, Quan Z and Dong, Hai and Yu, Qi and Neiat, Azadeh Ghari and Mistry, Sajib and Benatallah, Boualem and Medjahed, Brahim and others},
+  journal={Communications of the ACM},
+  volume={60},
+  number={4},
+  pages={64--72},
+  year={2017},
+  publisher={ACM}
+}
+
+
+% Content centric
+
+@incollection{logic-serviceDiscovery_reference,
+  title={A Logic-based Approach for Service Discovery with Composition Support},
+  author={Sirbu, Adina and Toma, Ioan and Roman, Dumitru},
+  booktitle={Emerging Web Services Technology},
+  pages={101--116},
+  year={2007},
+  publisher={Springer}
+}
+
+@article{logicReasoning_levels,
+  title={STC: Semantic Taxonomical Clustering for Service Category Learning},
+  author={Dasgupta, Sourish and Bhat, Satish and Lee, Yugyung},
+  journal={arXiv preprint arXiv:1303.5926},
+  year={2013}
+}
+
+@inproceedings{DIANE_object-oriented-service-matchmaking,
+  title={DIANE: an integrated approach to automated service discovery, matchmaking and composition},
+  author={K{\"u}ster, Ulrich and K{\"o}nig-Ries, Birgitta and Stern, Mirco and Klein, Michael},
+  booktitle={Proceedings of the 16th international conference on World Wide Web},
+  pages={1033--1042},
+  year={2007},
+  organization={ACM}
+}
+@article{owls-mx_reference,
+  title={OWLS-MX: A hybrid Semantic Web service matchmaker for OWL-S services},
+  author={Klusch, Matthias and Fries, Benedikt and Sycara, Katia},
+  journal={Web Semantics: Science, Services and Agents on the World Wide Web},
+  volume={7},
+  number={2},
+  pages={121--133},
+  year={2009},
+  publisher={Elsevier}
+}
+@article{owls-process-model-intuitive-mapping,
+  title={From bpel4ws process model to full owl-s ontology},
+  author={Aslam, Muhammad Ahtisham and Auer, S{\"o}ren and Shen, Jun},
+  year={2006}
+}
+@article{logic-matchmaker-glue,
+  title={The mediators centric approach to automatic web service discovery of glue},
+  author={Della Valle, Emanuele and Cerizza, Dario and Celino, Irene},
+  journal={MEDIATE2005},
+  volume={168},
+  pages={35--50},
+  year={2005}
+}
+@article{iMatcher1,
+  title={Discovery mechanism for learning semantic web service},
+  author={Mahmoud, Chaker Ben and Azaiez, Ikbel and Bettahar, Fathia and Gargouri, Faiez},
+  journal={International Journal on Semantic Web and Information Systems (IJSWIS)},
+  volume={12},
+  number={1},
+  pages={23--43},
+  year={2016},
+  publisher={IGI Global}
+}
+@inproceedings{iMatcher2,
+  title={The creation and evaluation of iSPARQL strategies for matchmaking},
+  author={Kiefer, Christoph and Bernstein, Abraham},
+  booktitle={European Semantic Web Conference},
+  pages={463--477},
+  year={2008},
+  organization={Springer}
+}
+@article{hotBlu,
+  title={HotBlu-A system for large scale service discovery and composition},
+  author={Constantinescu, Ion and Faltings, Boi and Binder, Walter}
+}
+@inproceedings{owls-uddi,
+  title={Semantic matching of web services capabilities},
+  author={Paolucci, Massimo and Kawamura, Takahiro and Payne, Terry R and Sycara, Katia},
+  booktitle={International Semantic Web Conference},
+  pages={333--347},
+  year={2002},
+  organization={Springer}
+}
+@inproceedings{sds,
+  title={Adapting BPEL4WS for the semantic web: The bottom-up approach to web service interoperation},
+  author={Mandell, Daniel J and McIlraith, Sheila A},
+  booktitle={International Semantic Web Conference},
+  pages={227--241},
+  year={2003},
+  organization={Springer}
+}
+@inproceedings{rowls,
+  title={A role-based support mechanism for service description and discovery},
+  author={Fernandez, Alberto and Vasirani, Matteo and Caceres, Cesar and Ossowski, Sascha},
+  booktitle={International Workshop on Service-Oriented Computing: Agents, Semantics, and Engineering},
+  pages={132--146},
+  year={2007},
+  organization={Springer}
+}
+@incollection{fc-match,
+  title={Semantic web service coordination},
+  author={Klusch, Matthine},
+  booktitle={CASCOM: Intelligent Service Coordination in the Semantic Web},
+  pages={59--104},
+  year={2008},
+  publisher={Springer}
+}
+
+@incollection{dsd-mm,
+  title={Coupled signature and specification matching for automatic service binding},
+  author={Klein, Michael and Konig-Ries, Birgitta},
+  booktitle={Web Services},
+  pages={183--197},
+  year={2004},
+  publisher={Springer}
+}
+@article{reasoning-web-scale,
+  title={Unifying reasoning and search to web scale},
+  author={Fensel, Dieter and Van Harmelen, Frank},
+  journal={IEEE Internet Computing},
+  volume={11},
+  number={2},
+  year={2007},
+  publisher={IEEE}
+}
+@online{scallops,
+	title = {Vision \& Goal},
+	url = {http://www.dfki.de/scallops/},
+	urldate = {2018-04-12},
+	file = {Vision & Goal:C\:\\Users\\alain\\Zotero\\storage\\NJ2KKXGC\\scallops.html:text/html}
+}
+@inproceedings{wsmo-mx_reference,
+  title={Wsmo-mx: A logic programming based hybrid service matchmaker},
+  author={Kaufer, Frank and Klusch, Matthias},
+  booktitle={Web Services, 2006. ECOWS'06. 4th European Conference on},
+  pages={161--170},
+  year={2006},
+  organization={IEEE}
+}
+@inproceedings{xsmo-mx_evaluation,
+  title={Evaluation of wsml service retrieval with wsmo-mx},
+  author={Klusch, Matthias and Kapahnke, Patrick and Kaufer, Frank},
+  booktitle={Web Services, 2008. ICWS'08. IEEE International Conference on},
+  pages={401--408},
+  year={2008},
+  organization={IEEE}
+}
+
+% P2P overlay network
+@article{p2p-overlay_reference,
+  title={A survey and comparison of peer-to-peer overlay network schemes},
+  author={Lua, Eng Keong and Crowcroft, Jon and Pias, Marcelo and Sharma, Ravi and Lim, Steven},
+  journal={IEEE Communications Surveys \& Tutorials},
+  volume={7},
+  number={2},
+  pages={72--93},
+  year={2005},
+  publisher={IEEE}
+}
+
+% Interaction centric
+@inproceedings{	soundInteractionCentric,
+  title={SoundSense: scalable sound sensing for people-centric applications on mobile phones},
+  author={Lu, Hong and Pan, Wei and Lane, Nicholas D and Choudhury, Tanzeem and Campbell, Andrew T},
+  booktitle={Proceedings of the 7th international conference on Mobile systems, applications, and services},
+  pages={165--178},
+  year={2009},
+  organization={ACM}
+}
+
+% M2M Communication - Machine to Machine
+@article{m2m_embeddedInternet,
+  title={M2M: From mobile to embedded internet},
+  author={Wu, Geng and Talwar, Shilpa and Johnsson, Kerstin and Himayat, Nageen and Johnson, Kevin D},
+  journal={IEEE Communications Magazine},
+  volume={49},
+  number={4},
+  year={2011},
+  publisher={IEEE}
+}
+
+% Service Composition
+@inproceedings{serviceComposition,
+  title={Qos aggregation for web service composition using workflow patterns},
+  author={Jaeger, Michael C and Rojec-Goldmann, Gregor and Muhl, Gero},
+  booktitle={Enterprise distributed object computing conference, 2004. EDOC 2004. Proceedings. Eighth IEEE International},
+  pages={149--159},
+  year={2004},
+  organization={IEEE}
+}
+
+% Interest definition
+@article{serviceInterestDefinition,
+  title={Composing web services on the semantic web},
+  author={Medjahed, Brahim and Bouguettaya, Athman and Elmagarmid, Ahmed K},
+  journal={The VLDB journal},
+  volume={12},
+  number={4},
+  pages={333--351},
+  year={2003},
+  publisher={Springer}
+}
+
+% PRIME - P-Rest at design/run tIME
+@article{prime_approach,
+  title={Engineering future internet applications: The PRIME approach},
+  author={Caporuscio, Mauro and Ghezzi, Carlo},
+  journal={Journal of Systems and Software},
+  volume={106},
+  pages={9--27},
+  year={2015},
+  publisher={Elsevier}
+}
+@inproceedings{prime_pec,
+  title={Pure Edge Computing Platform for the Future Internet},
+  author={D’Angelo, Mirko and Caporuscio, Mauro},
+  booktitle={Federation of International Conferences on Software Technologies: Applications and Foundations},
+  pages={458--469},
+  year={2016},
+  organization={Springer}
+}
+@inproceedings{service-discover_centralized-and-p2p,
+  title={Efficient semantic service discovery in pervasive computing environments},
+  author={Ben Mokhtar, Sonia and Kaul, Anupam and Georgantas, Nikolaos and Issarny, Val{\'e}rie},
+  booktitle={Proceedings of the ACM/IFIP/USENIX 2006 International Conference on Middleware},
+  pages={240--259},
+  year={2006},
+  organization={Springer-Verlag New York, Inc.}
+}
+
+%% PRIME - citation examples
+@article{prime_example-service_composition,
+  title={Integrated QoUE and QoS approach for optimal service composition selection in internet of services (IoS)},
+  author={Balakrishnan, Senthil Murugan and Sangaiah, Arun Kumar},
+  journal={Multimedia Tools and Applications},
+  volume={76},
+  number={21},
+  pages={22889--22916},
+  year={2017},
+  publisher={Springer}
+}
+@inproceedings{prime_example-IoT,
+  title={IoT-enabled Physical Telerehabilitation Platform},
+  author={Caporuscio, Mauro and Weyns, Danny and Andersson, Jesper and Axelsson, Clara and Petersson, G{\"o}ran},
+  booktitle={Software Architecture Workshops (ICSAW), 2017 IEEE International Conference on},
+  pages={112--119},
+  year={2017},
+  organization={IEEE}
+}
+% Edge computing
+@article{edgeComputing_vision-and-challenges,
+  title={Edge computing: Vision and challenges},
+  author={Shi, Weisong and Cao, Jie and Zhang, Quan and Li, Youhuizi and Xu, Lanyu},
+  journal={IEEE Internet of Things Journal},
+  volume={3},
+  number={5},
+  pages={637--646},
+  year={2016},
+  publisher={IEEE}
+}
+@article{p-grid_reference,
+  title={A structured hierarchical P2P model based on a rigorous binary tree code algorithm},
+  author={Liu, Hongjun and Luo, Ping and Zeng, Zhifeng},
+  journal={Future Generation Computer Systems},
+  volume={23},
+  number={2},
+  pages={201--208},
+  year={2007},
+  publisher={Elsevier}
+}
+@inproceedings{pastry_reference,
+  title={Pastry: Scalable, decentralized object location, and routing for large-scale peer-to-peer systems},
+  author={Rowstron, Antony and Druschel, Peter},
+  booktitle={IFIP/ACM International Conference on Distributed Systems Platforms and Open Distributed Processing},
+  pages={329--350},
+  year={2001},
+  organization={Springer}
+}
+@article{pulse_reference,
+  title={PULSE: an adaptive, incentive-based, unstructured P2P live streaming system},
+  author={Pianese, Fabio and Perino, Diego and Keller, Joaqu{\'\i}n and Biersack, Ernst W},
+  journal={IEEE Transactions on Multimedia},
+  volume={9},
+  number={8},
+  pages={1645--1660},
+  year={2007},
+  publisher={IEEE}
+}
+@inproceedings{hybrid_service-discovery_reference,
+  title={The case for a hybrid P2P search infrastructure},
+  author={Loo, Boon Thau and Huebsch, Ryan and Stoica, Ion and Hellerstein, Joseph M},
+  booktitle={International Workshop on Peer-to-Peer Systems},
+  pages={141--150},
+  year={2004},
+  organization={Springer}
+}
+@article{soa_grouping_workflow-execution,
+  title={A Service-Oriented Architecture enabling dynamic service grouping for optimizing distributed workflow execution},
+  author={Glatard, Tristan and Montagnat, Johan and Emsellem, David and Lingrand, Diane},
+  journal={Future Generation Computer Systems},
+  volume={24},
+  number={7},
+  pages={720--730},
+  year={2008},
+  publisher={Elsevier}
+}
+@inproceedings{owl-ws_grid-grouping,
+  title={OWL-WS: A workflow ontology for dynamic grid service composition},
+  author={Beco, Stefano and Cantalupo, Barbara and Giammarino, Ludovico and Matskanis, Nikolaos and Surridge, Mike},
+  booktitle={e-Science and Grid Computing, 2005. First International Conference on},
+  pages={8--pp},
+  year={2005},
+  organization={IEEE}
+}
+@inproceedings{semantic-interest_modelling_folksonomies,
+  title={Semantic modelling of user interests based on cross-folksonomy analysis},
+  author={Szomszor, Martin and Alani, Harith and Cantador, Ivan and O’Hara, Kieron and Shadbolt, Nigel},
+  booktitle={International Semantic Web Conference},
+  pages={632--648},
+  year={2008},
+  organization={Springer}
+}
+@article{ontology_recommneder-system,
+  title={Exploiting synergy between ontologies and recommender systems},
+  author={Middleton, Stuart E and Alani, Harith and De Roure, David C},
+  journal={arXiv preprint cs/0204012},
+  year={2002}
+}
+@inproceedings{user-interest_owl-foaf,
+  title={User interests: Definition, vocabulary, and utilization in unifying search and reasoning},
+  author={Zeng, Yi and Wang, Yan and Huang, Zhisheng and Damljanovic, Danica and Zhong, Ning and Wang, Cong},
+  booktitle={International Conference on Active Media Technology},
+  pages={98--107},
+  year={2010},
+  organization={Springer}
+}
+@online{interest_cambridge_reference,
+	title = {interest Meaning in the Cambridge English Dictionary},
+	url = {https://dictionary.cambridge.org/dictionary/english/interest},
+	abstract = {interest definition: 1. the feeling of wanting to give your attention to something or of wanting to be involved with and to discover more about something: 2. Your interests are the activities that you enjoy doing and the subjects that you like to spend time learning about: 3. the quality that makes…. Learn more.},
+	urldate = {2018-04-19},
+	langid = {english}
+}
+@article{inferring_user_interest,
+  title={Inferring user interest},
+  author={Claypool, Mark and Brown, David and Le, Phong and Waseda, Makoto},
+  journal={IEEE Internet Computing},
+  volume={5},
+  number={6},
+  pages={32--39},
+  year={2001},
+  publisher={IEEE}
+}
+@online{foaf_reference,
+	title = {{FOAF} Vocabulary Specification},
+	url = {http://xmlns.com/foaf/spec/},
+	urldate = {2018-04-19},
+	file = {FOAF Vocabulary Specification:C\:\\Users\\alain\\Zotero\\storage\\ZTNJ965T\\spec.html:text/html}
+}
+@article{sparql_reference,
+  title={SPARQL query language for RDF},
+  author={Prud, Eric and Seaborne, Andy and others},
+  year={2006}
+}
+@inproceedings{myconet_reference,
+  title={Myconet: A fungi-inspired model for superpeer-based peer-to-peer overlay topologies},
+  author={Snyder, Paul L and Greenstadt, Rachel and Valetto, Giuseppe},
+  booktitle={Self-Adaptive and Self-Organizing Systems, 2009. SASO'09. Third IEEE International Conference on},
+  pages={40--50},
+  year={2009},
+  organization={IEEE}
+}
+
+@article{systematic_reviews,
+  title={Procedures for performing systematic reviews},
+  author={Kitchenham, Barbara},
+  journal={Keele, UK, Keele University},
+  volume={33},
+  number={2004},
+  pages={1--26},
+  year={2004}
+}
+
+@online{rabbitmq_reference,
+	title = {{RabbitMQ} - Messaging that just works},
+	url = {https://www.rabbitmq.com/},
+	urldate = {2018-04-27}
+}
+
+@online{docker_reference,
+	title = {Docker - Build, Ship, and Run Any App, Anywhere},
+	url = {https://www.docker.com/},
+	urldate = {2018-04-30}
+}
+
+@inproceedings{jvm-usage_and_survey,
+  title={Write once, run anywhere a survey of mobile runtime environments},
+  author={Blom, S{\"o}ren and Book, Matthias and Gruhn, Volker and Hrushchak, Ruslan and K{\"o}hler, Andr{\'e}},
+  booktitle={Grid and Pervasive Computing Workshops, 2008. GPC Workshops' 08. The 3rd International Conference on},
+  pages={132--137},
+  year={2008},
+  organization={IEEE}
+}
+
+@inproceedings{fluid_architecture_reference,
+  title={Modelling and evaluating fluid software architectures for intelligent environments},
+  author={Kortuem, Gerd},
+  booktitle={2nd IET International Conference on Intelligent Environments},
+  pages={201--210},
+  year={2006},
+  organization={IET}
+}
+
+@online{zotero_reference,
+	title = {Zotero {\textbar} Your personal research assistant},
+	url = {https://www.zotero.org/},
+	urldate = {2018-05-07}
+}
+
+@online{foxit_reference,
+	title = {Free {PDF} Reader \& {PDF} Viewer Download {\textbar} Foxit Software},
+	url = {https://www.foxitsoftware.com},
+	abstract = {The best free {PDF} reader \& viewer used by over 475 million users. Foxit {PDF} reader for Windows, Mac, and more. A speedy {PDF} reader alternative to Adobe Reader.},
+	titleaddon = {Foxit},
+	urldate = {2018-05-07},
+	langid = {english}
+}
+
+@online{reliability_reference,
+	title = {Reliability - Degree Projects in Computer Science},
+	url = {http://coursepress.lnu.se/subject/thesis-projects/reliability/},
+	abstract = {Degree Projects in Computer Science {\textbar} Degree Project in Computer Science {\textbar} Linnaeus University},
+	urldate = {2018-05-08},
+	file = {Snapshot:C\:\\Users\\alain\\Zotero\\storage\\JHZ9J2NE\\reliability.html:text/html}
+}
+
+@online{validity_reference,
+	title = {Validity - Degree Projects in Computer Science},
+	url = {http://coursepress.lnu.se/subject/thesis-projects/validity/},
+	abstract = {Degree Projects in Computer Science {\textbar} Degree Project in Computer Science {\textbar} Linnaeus University},
+	urldate = {2018-05-08},
+	file = {Snapshot:C\:\\Users\\alain\\Zotero\\storage\\DVCAQSQF\\validity.html:text/html}
+}
+
+@article{nitelight_reference,
+  title={Nitelight: A graphical tool for semantic query construction},
+  author={Russell, Alistair and Smart, Paul R and Braines, Dave and Shadbolt, Nigel R},
+  year={2008}
+}
+
+@inproceedings{graphical_sparql_reference,
+  title={Konduit vqb: a visual query builder for sparql on the social semantic desktop},
+  author={Ambrus, Oszk{\'a}r and M{\"o}ller, Knud and Handschuh, Siegfried and others},
+  booktitle={Workshop on Visual Interfaces to the Social and Semantic Web},
+  year={2010}
+}
+
+@inproceedings{sparql_comparison_alternatives,
+  title={Which of the following SPARQL Queries are Similar? Why?},
+  author={Dividino, Renata Queiroz and Gr{\"o}ner, Gerd},
+  booktitle={LD4IE@ ISWC},
+  year={2013}
+}
+
+@article{sub_reference,
+  title={A semantic publish-subscribe architecture for the Internet of Things},
+  author={Roffia, Luca and Morandi, Francesco and Kiljander, Jussi and D’Elia, Alfredo and Vergari, Fabio and Viola, Fabio and Bononi, Luciano and Cinotti, Tullio Salmon},
+  journal={IEEE Internet of Things Journal},
+  volume={3},
+  number={6},
+  pages={1274--1296},
+  year={2016},
+  publisher={IEEE}
+}
+
+@article{interests_conceptual_clustering,
+  title={Modeling user interests by conceptual clustering},
+  author={Godoy, Daniela and Amandi, Anal{\'\i}a},
+  journal={Information Systems},
+  volume={31},
+  number={4-5},
+  pages={247--265},
+  year={2006},
+  publisher={Elsevier}
+}
+
+@online{wordnet_reference,
+	title = {{WordNet} {\textbar} A Lexical Database for English},
+	url = {https://wordnet.princeton.edu/},
+	urldate = {2018-05-24}
+}
+
+@inproceedings{connecting-similar-interests_over_web-services,
+  title={Connecting Users with Similar Interests across Multiple Web Services.},
+  author={Kwak, Haewoon and Shin, Hwa-Yong and Yoon, Jong-Il and Moon, Sue B},
+  booktitle={ICWSM},
+  year={2009}
+}
+
+@inproceedings{extract-implicit-interests_from_search-history,
+  title={Learning implicit user interests using ontology and search history for personalization},
+  author={Daoud, Mariam and Tamine, Lynda and Boughanem, Mohand and Chebaro, Bilal},
+  booktitle={International Conference on Web Information Systems Engineering},
+  pages={325--336},
+  year={2007},
+  organization={Springer}
+}
+
+@online{curlie_reference,
+	title = {Curlie},
+	url = {https://curlie.org/},
+	abstract = {Collector of {URLs}},
+	urldate = {2018-05-24},
+	file = {Snapshot:C\:\\Users\\alain\\Zotero\\storage\\HYSJ2FYF\\curlie.org.html:text/html}
+}
+
+@inproceedings{user-interests_hybrid-recommender,
+  title={Capturing knowledge of user preferences: ontologies in recommender systems},
+  author={Middleton, Stuart E and De Roure, David C and Shadbolt, Nigel R},
+  booktitle={Proceedings of the 1st international conference on Knowledge capture},
+  pages={100--107},
+  year={2001},
+  organization={ACM}
+}
+
+% Books
+@article{reactiveMicroservicesArchitecture,
+  title={Reactive microservices architecture: design principles for distributed systems},
+  author={Bon{\'e}r, Jonas},
+  year={2016},
+  publisher={O'Reilly Media}
+}
