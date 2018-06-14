@@ -2,6 +2,8 @@
 
 LaTeX Linnaeus University template for scientific reports. 
 
+![snapshot](./img/snapshot.png)
+
 ## Compilation
 
 Recommended to use Texmaker. Build with the following:
