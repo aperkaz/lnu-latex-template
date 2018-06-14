@@ -1,4 +1,4 @@
-# lnu-report-template
+# lnu-latex-template
 
 LaTeX Linnaeus University template for scientific reports. 
 
